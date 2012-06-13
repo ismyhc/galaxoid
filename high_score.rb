@@ -2,10 +2,11 @@ class HighScore < Chingu::GameState
   traits :timer
   
   def setup
-    self.input = {:esc => :exit, :a => :enter_name}
-    #Text.create("Online Highscores", :x => $window.width/2, :y => 80, :size => 24, :rotation_center => :center)
+    super
+    @song = Song["end.ogg"]
+    after(1500) { @song.play(true) }
     begin
-      @high_score_list = OnlineHighScoreList.load(:game_id => "31", :login => "galaxiod", :password => "misterbug", :limit => 16)
+      @high_score_list = OnlineHighScoreList.load(:game_id => "31", :login => "galaxoid", :password => "misterbug", :limit => 16)
     rescue
       @high_score_list = [:name => "No Internet", :score => 0]
     end
@@ -23,18 +24,44 @@ class HighScore < Chingu::GameState
   def enter_name
     push_game_state EnterName.new(:callback => method(:add) )
   end
+
+  def restart_game
+    push_game_state(StartMenu)
+  end
+  
+  def finalize
+    @song.stop
+  end
+  
+  def disabled_enter_name
+  end
   
   def add(name = nil)
     return unless name
     return unless name.size > 0
     data = {:name => name, :score => HighScore.the_score, :text => ""}
-    position = @high_score_list.add(data)
-    if HighScore.the_score >= @high_score_list[0][:score]
-      #Text.create("YOU GOT THE HIGH SCORE", :x => 200, :y => 200, :size => 20)
-    create_text
-    else
-    create_text
+    
+    begin
+      position = @high_score_list.add(data)
+    rescue
     end
+    #if HighScore.the_score >= @high_score_list[0][:score]
+      #Text.create("YOU GOT THE HIGH SCORE", :x => 200, :y => 200, :size => 20)
+    #create_text
+    #else
+    create_text
+    #end
+    @disable_enter_name = "true"
+  end
+  
+  def update
+    
+    if !defined? @disable_enter_name
+      self.input = {:esc => :exit, :a => :enter_name, :return => :restart_game}
+    elsif @disable_enter_name == "true"
+      self.input = {:esc => :exit, :a => :disabled_enter_name, :return => :restart_game}
+    end
+
   end
 
   def create_text
@@ -54,21 +81,17 @@ class HighScore < Chingu::GameState
       Text.create(high_score[:name], :font => "fonts/phaserbank.ttf", :x => 236, :y => y, :size => 20, :rotation_center => :top_left)
       Text.create(high_score[:score], :font => "fonts/phaserbank.ttf", :x => 566, :y => y, :size => 20, :rotation_center => :top_right)
     end
-    
-    
   end
-  
+
   def draw
-  @high_score_title_text = "-- High Scores --"
-  @high_score_title_x = 315
-  @high_score_title_y = 73
-  @high_score_title = Text.create(@high_score_title_text, :font => "fonts/phaserbank.ttf", :size => 20,
-                            :color => Color::WHITE,
-                            :x => @high_score_title_x, :y => @high_score_title_y, :zorder => 8)
-  fill_rect([200,98,400,400], Color::WHITE, 4)
-  #fill_rect([205,255,390,190], Color::BLUE, 5)
-  fill_rect([202,100,396,396], Color::BLACK, 6)
-  #  create_text
+    @high_score_title_text = "-- High Scores --"
+    @high_score_title_x = 315
+    @high_score_title_y = 73
+    @high_score_title = Text.create(@high_score_title_text, :font => "fonts/phaserbank.ttf", :size => 20,
+                              :color => Color::WHITE,
+                              :x => @high_score_title_x, :y => @high_score_title_y, :zorder => 8)
+    fill_rect([200,98,400,400], Color::WHITE, 4)
+    fill_rect([202,100,396,396], Color::BLACK, 6)
     super
   end  
 end

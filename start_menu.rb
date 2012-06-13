@@ -4,6 +4,8 @@ class StartMenu < Chingu::GameState
   def initialize
     super
     self.input = { :f1 => :debug, [:q, :escape] => :exit, :return => :load }
+    @song = Song["start_menu.ogg"]
+    after(1500) { @song.play(true) }
     
     # Get high scores from gamercv.com
     #
@@ -58,6 +60,10 @@ class StartMenu < Chingu::GameState
     
   def load
     after(500) { push_game_state(Play) }
+  end
+
+  def finalize
+    @song.stop
   end
 
   def draw

@@ -37,7 +37,7 @@ class EnterName < Chingu::GameState
     end
   
     @texts[@index].color = ::Gosu::Color::GREEN
-    @name = Text.create("", :rotaion_center => :top_center, :x => $window.width/2, :y => 60, :size => 80)
+    @name = Text.create("", :font => "fonts/phaserbank.ttf", :rotaion_center => :top_center, :x => $window.width/2, :y => 60, :size => 80)
   end
 
   # Move cursor 1 step to the left
@@ -87,7 +87,7 @@ class EnterName < Chingu::GameState
   
   def go
     @callback.call(@name.text)
-    pop_game_state
+    pop_game_state(:setup => true)
   end
   
 end
