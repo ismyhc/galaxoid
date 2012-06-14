@@ -5,6 +5,7 @@ class StartMenu < Chingu::GameState
     super
     self.input = { :f1 => :debug, [:q, :escape] => :exit, :return => :load }
     @song = Song["start_menu.ogg"]
+    @select_sound = Sound["select.ogg"]
     after(1500) { @song.play(true) }
     
     # Get high scores from gamercv.com
@@ -13,8 +14,9 @@ class StartMenu < Chingu::GameState
     # text to let user know there was a problem
     begin
       @high_score_list = OnlineHighScoreList.load(:game_id => "31", :login => "galaxiod", :password => "misterbug", :limit => 6)
-    rescue
-      @high_score_list = [:name => "No Internet", :score => 0]
+   rescue
+      @high_score_list = HighScoreList.load(:size => 6)
+ #     @high_score_list = [:name => "No Internet", :score => 0]
     end
   end
   
@@ -59,7 +61,8 @@ class StartMenu < Chingu::GameState
   end
     
   def load
-    after(500) { push_game_state(Play) }
+    @select_sound.play(0.4, 3.0, false)
+    after(100) { push_game_state(Play) }
   end
 
   def finalize

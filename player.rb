@@ -4,19 +4,20 @@ class Player < Chingu::GameObject
   
   def initialize(options = {})
     super
-    @mode = :additive
-    
-#    @image = Image["player.png"]
-    @hit_sound = Sound["no.ogg"]
+    @mode = :default
+
+    @hit_sound = Sound["hit.ogg"]
+    @move_sound = Sound["robot_move.ogg"]
     @player_speed = 10
-    @player_image_width = 11
-    @player_image_height = 15
+    @player_image_width = 11 * 3
+    @player_image_height = 15 * 3
     @x = ($window.width - (@player_image_width / 2)) / 2
     @y = ($window.height - @player_image_height)
-    #@color = Color::BLUE
+    @color = Color::GREEN
+    @life_points = 5
 
-    # Load the full animation from tile-file media/droid.bmp
-    @animation = Chingu::Animation.new(:file => "droid_11x15.bmp")
+    # Load the full animation from tile-file
+    @animation = Chingu::Animation.new(:file => "player_11x15.bmp")
     @animation.frame_names = { :scan => 0..5, :up => 6..7, :down => 8..9, :left => 10..11, :right => 12..13 }
     
     # Start out by animation frames 0-5 (contained by @animation[:scan])
@@ -35,6 +36,7 @@ class Player < Chingu::GameObject
     else
       @x = @x - @player_speed
     end
+    @move_sound.play_pan(-100, 0.5, 2.0, false)
 
     @frame_name = :left
   end
@@ -45,6 +47,7 @@ class Player < Chingu::GameObject
     else
       @x = @x + @player_speed
     end
+    @move_sound.play_pan(100, 0.5, 2.0, false)
 
     @frame_name = :right
   end
@@ -55,6 +58,7 @@ class Player < Chingu::GameObject
     else
       @y = @y - @player_speed
     end
+    @move_sound.play_pan(0, 0.5, 2.0, false)
 
     @frame_name = :up
   end
@@ -65,6 +69,7 @@ class Player < Chingu::GameObject
     else
       @y = @y + @player_speed
     end
+    @move_sound.play_pan(0, 0.5, 2.0, false)
 
     @frame_name = :down
   end
@@ -85,9 +90,18 @@ class Player < Chingu::GameObject
   end
   
   def die!
-    #@color = Color::RED
+    @life_points = @life_points - 1
+    if @life_points == 0
+      @color = Color::RED
+    else
+      @color = Color::GREEN
+    end
     #@image = Image["hit.png"]
     @hit_sound.play
+  end
+  
+  def life_points
+    @life_points
   end
   
   def reset!
