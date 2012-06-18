@@ -4,19 +4,20 @@ class HighScore < Chingu::GameState
   def setup
     super
     @song = Song["end.ogg"]
-    after(100) { @song.play(true) }
+    after(1500) { @song.play(true) }
     begin
       @high_score_list = OnlineHighScoreList.load(:game_id => "31", :login => "galaxoid", :password => "misterbug", :limit => 16)
     rescue
       @high_score_list = HighScoreList.load(:size => 6)
+    ensure
+      #not sure why, but @the_score not set unless i wait?
+      after(1000) { create_text }
     end
-    #not sure why, but @the_score not set unless i wait?
-    after(100) { create_text }
   end
   
+  #Score keeper class
   class << self
     attr_accessor :score, :the_score
-    #@the_score = 0
     def score(score)
       @the_score = score
     end
@@ -40,21 +41,18 @@ class HighScore < Chingu::GameState
   def add(name = nil)
     return unless name
     return unless name.size > 0
+  
     data = {:name => name, :score => HighScore.the_score, :text => ""}
     
-    puts HighScore.the_score
     begin
       position = @high_score_list.add(data)
     rescue
       puts "Didn't make the online Highscore list."
+    ensure
+      create_text
+      @disable_enter_name = "true"
     end
-    #if HighScore.the_score >= @high_score_list[0][:score]
-      #Text.create("YOU GOT THE HIGH SCORE", :x => 200, :y => 200, :size => 20)
-    #create_text
-    #else
-    create_text
-    #end
-    @disable_enter_name = "true"
+    
   end
   
   def update
@@ -73,6 +71,18 @@ class HighScore < Chingu::GameState
     #after(1) { puts HighScore.the_score }
     #puts HighScore.the_score
     
+
+
+    @high_score_list.each_with_index do |high_score, index|
+      y = index * 25 + 151
+      Text.create(high_score[:name], :font => "fonts/phaserbank.ttf", :x => 236, :y => y, :size => 20, :rotation_center => :top_left)
+      Text.create(high_score[:score], :font => "fonts/phaserbank.ttf", :x => 566, :y => y, :size => 20, :rotation_center => :top_right)
+    end
+
+  end
+
+  def draw
+#    Text.destroy_all
     @game_over_x = ($window.width / 2) + 5
     @game_over_y = 40
     @game_over = "GAME OVER"
@@ -85,16 +95,7 @@ class HighScore < Chingu::GameState
     @player_score_text = " Your score: <c=ffff00>#{HighScore.the_score.to_s}</c> "
     @player_score = Text.create(@player_score_text, :font => "fonts/phaserbank.ttf", :size => 40,
                               :x => @player_score_x, :y => @player_score_y, :rotation_center => :center)
-
-    @high_score_list.each_with_index do |high_score, index|
-      y = index * 25 + 151
-      Text.create(high_score[:name], :font => "fonts/phaserbank.ttf", :x => 236, :y => y, :size => 20, :rotation_center => :top_left)
-      Text.create(high_score[:score], :font => "fonts/phaserbank.ttf", :x => 566, :y => y, :size => 20, :rotation_center => :top_right)
-    end
-
-  end
-
-  def draw
+                              
     @high_score_title_text = "-- High Scores --"
     @high_score_title_x = 315
     @high_score_title_y = 123

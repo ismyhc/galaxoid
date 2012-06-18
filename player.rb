@@ -14,7 +14,7 @@ class Player < Chingu::GameObject
     @x = ($window.width - (@player_image_width / 2)) / 2
     @y = ($window.height - @player_image_height)
     @color = Color::GREEN
-    @life_points = 5
+    @life_points = 100
 
     # Load the full animation from tile-file
     @animation = Chingu::Animation.new(:file => "player_11x15.bmp")
@@ -28,6 +28,10 @@ class Player < Chingu::GameObject
 
     cache_bounding_circle # This does a lot for performance
     
+  end
+  
+  def life
+    @life_points
   end
   
   def move_left
@@ -90,7 +94,7 @@ class Player < Chingu::GameObject
   end
   
   def die!
-    @life_points = @life_points - 1
+    @life_points = @life_points - 20
     if @life_points == 0
       @color = Color::RED
     else
@@ -104,6 +108,10 @@ class Player < Chingu::GameObject
     @life_points
   end
   
+  def life_bonus!
+    @life_points = @life_points + 20
+  end
+
   def reset!
     #@image = Image["player.png"]
     @x = ($window.width - (@player_image_width / 2)) / 2

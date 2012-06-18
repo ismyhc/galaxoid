@@ -1,4 +1,4 @@
-class Enemy < Chingu::GameObject
+class ScoreBonus < Chingu::GameObject
   traits :collision_detection, :bounding_circle, :timer
   attr_accessor :color
   
@@ -6,12 +6,14 @@ class Enemy < Chingu::GameObject
     super
     @mode = :default
     
-    @enemy_speed = rand(5...13)
-    @enemy_image_width = 10 * 3
-    @enemy_image_height = 10 * 3
-    @x = rand($window.width - @enemy_image_width)
-    @y = @enemy_image_height / 2
-    @color = Color::YELLOW
+    @score_bonus_sound = Sound["score_bonus.ogg"]
+    
+    @score_bonus_speed = rand(5...13)
+    @score_bonus_image_width = 10 * 3
+    @score_bonus_image_height = 10 * 3
+    @x = rand($window.width - @score_bonus_image_width)
+    @y = @score_bonus_image_height / 2
+    @color = Color::RED
 
     # Load the full animation from tile-file media/droid.bmp
     @animation = Chingu::Animation.new(:file => "enemy_10x10.png")
@@ -30,10 +32,10 @@ class Enemy < Chingu::GameObject
   def update
                 
     if @y >= $window.height
-      @y = 0
+      self.destroy!
       @x = rand($window.width)
     else
-      @y = @y + @enemy_speed
+      @y = @y + @score_bonus_speed
     end
 
     self.factor = 3
@@ -42,15 +44,14 @@ class Enemy < Chingu::GameObject
   end
   
   def die!
+    @score_bonus_sound.play
     @color = Color::RED
     self.reset!
-    #@image = Image["hit.png"]
   end
   
   def reset!
-    @color = Color::YELLOW
-    @x = rand($window.width - @enemy_image_width)
     @y = 0
+    self.destroy!
   end
   
 end
