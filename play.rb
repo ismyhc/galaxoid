@@ -1,14 +1,14 @@
 class Play < Chingu::GameState
-  traits :timer
+  traits :timer, :effect
   
   class << self
     attr_accessor :score
   end
   
   def setup    
-    @parallax = Chingu::Parallax.create(:x => 100, :y => 100, :rotation_center => :top_left, :zorder => 5)
+    @parallax = Chingu::Parallax.create(:x => 0, :y => 0, :rotation_center => :top_left, :zorder => 5)
     @parallax << { :image => "outerspace_pattern.jpg", :damping => 1, :repeat_x => true, :repeat_y => true }
-    @parallax << { :image => "moon.png", :damping => 2, :repeat_x => true, :repeat_y => false }
+    #@parallax << { :image => "star.png", :damping => 1, :repeat_x => true, :repeat_y => true }
     
     @song = Song["background_song.ogg"]
     @song.play(true)    
@@ -29,7 +29,6 @@ class Play < Chingu::GameState
     @enemy = []
     6.times { @enemy << new_enemy }
     every(30000) { 2.times { @enemy << new_enemy } }
-    #@life_bonus = []
     life_bonus_time = rand(5000...20000)
     score_bonus_time = rand(3000...16000)
     every(life_bonus_time) { @life_bonus = new_life_bonus }
@@ -37,6 +36,7 @@ class Play < Chingu::GameState
     @running = true
     @score = 0
     @score_font = Gosu::Font.new($window, "fonts/phaserbank.ttf", 20)
+
   end
   
   def camera_left
@@ -75,6 +75,8 @@ class Play < Chingu::GameState
       @player.each_collision(@enemy) do |player, enemy|
         player.die!
         enemy.die!
+        message = Chingu::Text.create("HP <c=ff0000>-20</c>", :font => "fonts/phaserbank.ttf", :x => 10, :y => 60, :size => 20)
+        after(1000) { message.destroy! }
         if @player.life_points <= 0
           stop_game!        
         end
@@ -83,16 +85,24 @@ class Play < Chingu::GameState
 
       @player.each_collision(@life_bonus) do |player, life_bonus|
         life_bonus.die!
+
         if @player.life_points >= 100
+          message = Chingu::Text.create("Score <c=fff000>+500</c>", :font => "fonts/phaserbank.ttf", :x => 10, :y => 80, :size => 20)
+          after(1000) { message.destroy! }
           @score = @score + 500
         else
+          message = Chingu::Text.create("HP <c=00ff00>+20</c>", :font => "fonts/phaserbank.ttf", :x => 10, :y => 80, :size => 20)
+          after(1000) { message.destroy! }
           player.life_bonus!
         end
       end
 
       @player.each_collision(@score_bonus) do |player, score_bonus|
         score_bonus.die!
-        @score = @score + 1000
+        bonus = rand(100...3000)
+        @score = @score + bonus
+        message = Chingu::Text.create("Score <c=fff000>+#{bonus}</c>", :font => "fonts/phaserbank.ttf", :x => 10, :y => 100, :size => 20)
+        after(1000) { message.destroy! }
       end
       
     end
@@ -126,7 +136,7 @@ class Play < Chingu::GameState
     fill_rect([10,40,size,10], Color::RED, 25)
   end
   
-  def draw    
+  def draw
     @score_font.draw("Current Score: <c=fff000>#{@score}</c>", 10, 10, 20)
     life_bar(@player.life)
     $window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"

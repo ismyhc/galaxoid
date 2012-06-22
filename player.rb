@@ -13,7 +13,7 @@ class Player < Chingu::GameObject
     @player_image_height = 15 * 3
     @x = ($window.width - (@player_image_width / 2)) / 2
     @y = ($window.height - @player_image_height)
-    @color = Color::GREEN
+    @color = Gosu::Color.argb(0xffff8b40)
     @life_points = 100
 
     # Load the full animation from tile-file
@@ -97,8 +97,6 @@ class Player < Chingu::GameObject
     @life_points = @life_points - 20
     if @life_points == 0
       @color = Color::RED
-    else
-      @color = Color::GREEN
     end
     #@image = Image["hit.png"]
     @hit_sound.play

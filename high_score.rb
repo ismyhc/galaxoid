@@ -68,10 +68,6 @@ class HighScore < Chingu::GameState
   def create_text
     
     Text.destroy_all
-    #after(1) { puts HighScore.the_score }
-    #puts HighScore.the_score
-    
-
 
     @high_score_list.each_with_index do |high_score, index|
       y = index * 25 + 151
@@ -82,7 +78,6 @@ class HighScore < Chingu::GameState
   end
 
   def draw
-#    Text.destroy_all
     @game_over_x = ($window.width / 2) + 5
     @game_over_y = 40
     @game_over = "GAME OVER"

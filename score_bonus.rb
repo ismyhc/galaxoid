@@ -8,19 +8,19 @@ class ScoreBonus < Chingu::GameObject
     
     @score_bonus_sound = Sound["score_bonus.ogg"]
     
-    @score_bonus_speed = rand(5...13)
-    @score_bonus_image_width = 10 * 3
-    @score_bonus_image_height = 10 * 3
+    @score_bonus_speed = rand(5...6)
+    @score_bonus_image_width = 24
+    @score_bonus_image_height = 24
     @x = rand($window.width - @score_bonus_image_width)
     @y = @score_bonus_image_height / 2
-    @color = Color::RED
 
-    # Load the full animation from tile-file media/droid.bmp
-    @animation = Chingu::Animation.new(:file => "enemy_10x10.png")
-    @animation.frame_names = { :scan => 1...4 }
+    # Load the full animation from vertical sprite strip
+    @animation = Chingu::Animation.new(:file => "score_bonus.png", :delay => 400, :bounce => false)
+    @animation.frame_names = { :main => 0...1 }
+    @color = Color::YELLOW
     
-    # Start out by animation frames 0-5 (contained by @animation[:scan])
-    @frame_name = :scan
+    # Start out by animation frames 0-1
+    @frame_name = :main
   
     @last_x, @last_y = @x, @y
     update
@@ -38,14 +38,13 @@ class ScoreBonus < Chingu::GameObject
       @y = @y + @score_bonus_speed
     end
 
-    self.factor = 3
+    #self.factor = 2
     @image = @animation[@frame_name].next
 
   end
   
   def die!
     @score_bonus_sound.play
-    @color = Color::RED
     self.reset!
   end
   

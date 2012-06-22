@@ -8,19 +8,18 @@ class LifeBonus < Chingu::GameObject
     
     @life_bonus_sound = Sound["life_bonus.ogg"]
     
-    @life_bonus_speed = rand(5...13)
+    @life_bonus_speed = rand(5...8)
     @life_bonus_image_width = 10 * 3
     @life_bonus_image_height = 10 * 3
     @x = rand($window.width - @life_bonus_image_width)
     @y = @life_bonus_image_height / 2
-    @color = Color::BLUE
 
-    # Load the full animation from tile-file media/droid.bmp
-    @animation = Chingu::Animation.new(:file => "enemy_10x10.png")
-    @animation.frame_names = { :scan => 1...4 }
+    # Load the full animation from vertical sprite strip
+    @animation = Chingu::Animation.new(:file => "life_bonus_10x10.png", :delay => 700)
+    @animation.frame_names = { :main => 0...3 }
     
-    # Start out by animation frames 0-5 (contained by @animation[:scan])
-    @frame_name = :scan
+    # Start out by animation frames 0-3
+    @frame_name = :main
   
     @last_x, @last_y = @x, @y
     update
@@ -45,7 +44,6 @@ class LifeBonus < Chingu::GameObject
   
   def die!
     @life_bonus_sound.play
-    @color = Color::RED
     self.reset!
   end
   
