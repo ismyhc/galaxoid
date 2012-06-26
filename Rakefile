@@ -1,19 +1,17 @@
-#!/usr/bin/env ruby
 require 'releasy'
 require 'rubygems' rescue nil
 require 'bundler/setup' # Releasy doesn't require that your application uses bundler, but it does make things easier.
-$LOAD_PATH.unshift File.join(File.expand_path(__FILE__), "..", "..", "lib")
 
 #<<<
 Releasy::Project.new do
   name "Galaxoid"
   version "0.1"
 
-  executable "main.rb"
+  executable "lib/main.rb"
   verbose
-  files '**/*.*'
+  files ['lib/*.rb', 'lib/images/*.*', 'lib/fonts/*.*', 'lib/songs/*.*', 'lib/sounds/*.*']
   exposed_files "README.markdown"
-  add_link "http://my_application.github.com", "My Application website"
+  add_link "http://github.com/ismyhc/galaxoid", "Galaxoid Github"
   exclude_encoding # Applications that don't use advanced encoding (e.g. Japanese characters) can save build size with this.
 
   # Create a variety of releases, for all platforms.
