@@ -1,5 +1,6 @@
 class LifeBonus < Chingu::GameObject
-  traits :collision_detection, :bounding_circle, :timer
+  trait :bounding_box, :debug => false, :scale => 0.8
+  traits :collision_detection, :timer
   attr_accessor :color
   
   def initialize(options ={})
@@ -24,7 +25,7 @@ class LifeBonus < Chingu::GameObject
     @last_x, @last_y = @x, @y
     update
 
-    cache_bounding_circle # This does a lot for performance
+    cache_bounding_box # This does a lot for performance
 
   end
   
@@ -43,7 +44,7 @@ class LifeBonus < Chingu::GameObject
   end
   
   def die!
-    @life_bonus_sound.play
+    @life_bonus_sound.play(0.4, 1.0)
     self.reset!
   end
   

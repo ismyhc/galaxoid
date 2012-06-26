@@ -1,5 +1,6 @@
 class Enemy < Chingu::GameObject
-  traits :collision_detection, :bounding_circle, :timer
+  trait :bounding_box, :debug => false, :scale => 0.5
+  traits :collision_detection, :timer
   attr_accessor :color
   
   def initialize(options ={})
@@ -25,7 +26,7 @@ class Enemy < Chingu::GameObject
     @last_x, @last_y = @x, @y
     update
 
-    cache_bounding_circle # This does a lot for performance
+    cache_bounding_box # This does a lot for performance
 
   end
   
@@ -45,7 +46,6 @@ class Enemy < Chingu::GameObject
   
   def die!
     self.reset!
-    #@image = Image["hit.png"]
   end
   
   def reset!

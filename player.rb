@@ -1,5 +1,6 @@
 class Player < Chingu::GameObject
-  traits :collision_detection, :bounding_circle, :timer
+  trait :bounding_box, :debug => false, :scale => 0.8
+  traits :collision_detection, :timer
   attr_accessor :color
   
   def initialize(options = {})
@@ -8,25 +9,25 @@ class Player < Chingu::GameObject
 
     @hit_sound = Sound["hit.ogg"]
     @move_sound = Sound["robot_move.ogg"]
-    @player_speed = 10
-    @player_image_width = 11 * 3
-    @player_image_height = 15 * 3
+    @player_speed = 8
+    @player_image_width = 10 * 4
+    @player_image_height = 10 * 4
     @x = ($window.width - (@player_image_width / 2)) / 2
     @y = ($window.height - @player_image_height)
     @color = Gosu::Color.argb(0xffff8b40)
     @life_points = 100
-
+ 
     # Load the full animation from tile-file
-    @animation = Chingu::Animation.new(:file => "player_11x15.bmp")
-    @animation.frame_names = { :scan => 0..5, :up => 6..7, :down => 8..9, :left => 10..11, :right => 12..13 }
+    @animation = Chingu::Animation.new(:file => "player_10x10.png", :delay => 300, :bounce => true)
+    @animation.frame_names = { :main => 0..2 }
     
     # Start out by animation frames 0-5 (contained by @animation[:scan])
-    @frame_name = :scan
+    @frame_name = :main
   
     @last_x, @last_y = @x, @y
     update
 
-    cache_bounding_circle # This does a lot for performance
+    cache_bounding_box # This does a lot for performance
     
   end
   
@@ -34,15 +35,29 @@ class Player < Chingu::GameObject
     @life_points
   end
   
+  def fire_bullet
+    Bullet.create(:x => @x, :y => @y)
+  end
+  
+  def fire_bullets
+    if holding?(:space)
+      after(500) { puts "ya" }
+    elsif holding?(:space) == false
+      
+      puts "boo"
+    end
+    puts holding?(:space)
+  end
+
   def move_left
     if @x <= (0 + (@player_image_width / 2))
       @x = (0 + (@player_image_width / 2))
     else
       @x = @x - @player_speed
     end
-    @move_sound.play_pan(-100, 0.5, 2.0, false)
+    @move_sound.play_pan(-100, 0.3, 2.0, false)
 
-    @frame_name = :left
+    @frame_name = :main
   end
 
   def move_right
@@ -51,9 +66,9 @@ class Player < Chingu::GameObject
     else
       @x = @x + @player_speed
     end
-    @move_sound.play_pan(100, 0.5, 2.0, false)
+    @move_sound.play_pan(100, 0.3, 2.0, false)
 
-    @frame_name = :right
+    @frame_name = :main
   end
 
   def move_up
@@ -62,9 +77,9 @@ class Player < Chingu::GameObject
     else
       @y = @y - @player_speed
     end
-    @move_sound.play_pan(0, 0.5, 2.0, false)
+    @move_sound.play_pan(0, 0.3, 2.0, false)
 
-    @frame_name = :up
+    @frame_name = :main
   end
 
   def move_down
@@ -73,9 +88,9 @@ class Player < Chingu::GameObject
     else
       @y = @y + @player_speed
     end
-    @move_sound.play_pan(0, 0.5, 2.0, false)
+    @move_sound.play_pan(0, 0.3, 2.0, false)
 
-    @frame_name = :down
+    @frame_name = :main
   end
   
   def update
@@ -83,11 +98,15 @@ class Player < Chingu::GameObject
     # @image is drawn by default by GameObject#draw
     @image = @animation[@frame_name].next
     
+    self.factor = 4
+
     #
     # If droid stands still, use the scanning animation
     #
-    @frame_name = :scan if @x == @last_x && @y == @last_y
+    @frame_name = :main if @x == @last_x && @y == @last_y
     #@color = Color::BLUE
+    
+    
     
     @x, @y = @last_x, @last_y if outside_window?  # return to previous coordinates if outside window
     @last_x, @last_y = @x, @y                     # save current coordinates for possible use next time
@@ -99,7 +118,7 @@ class Player < Chingu::GameObject
       @color = Color::RED
     end
     #@image = Image["hit.png"]
-    @hit_sound.play
+    @hit_sound.play(0.8, 1.0, false)
   end
   
   def life_points

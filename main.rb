@@ -1,11 +1,10 @@
-#!/usr/bin/env ruby
 require 'rubygems' rescue nil
-$LOAD_PATH.unshift File.join(File.expand_path(__FILE__), "..", "..", "lib")
+$LOAD_PATH.unshift File.join(File.expand_path(__FILE__), "..", "..")
 require 'chingu'
 require './play.rb'
-require './end.rb'
 require './player.rb'
 require './enemy.rb'
+require './bullet.rb'
 require './life_bonus.rb'
 require './score_bonus.rb'
 require './start_menu.rb'

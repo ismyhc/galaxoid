@@ -1,59 +1,61 @@
 class StartMenu < Chingu::GameState
   traits :timer
   
-  def initialize
+  def initialize(options ={})
     super
+    @center_x = $window.width / 2
+    @center_y = $window.height / 2
+
     self.input = { :f1 => :debug, [:q, :escape] => :exit, :return => :load }
-    @song = Song["start_menu.ogg"]
+    @song = Song["start.ogg"]
+    @background = Image["outerspace_pattern.jpg"]
     @select_sound = Sound["select.ogg"]
-    after(1500) { @song.play(true) }
-    
-    # Get high scores from gamercv.com
-    #
-    # Check if exception, create dummy
-    # text to let user know there was a problem
+    after(1000) { @song.play(false) }
+    @default_font = "fonts/phaserbank.ttf"
+
     begin
       @high_score_list = OnlineHighScoreList.load(:game_id => "31", :login => "galaxiod", :password => "misterbug", :limit => 6)
-   rescue
+    rescue
       @high_score_list = HighScoreList.load(:size => 6)
- #     @high_score_list = [:name => "No Internet", :score => 0]
     end
+
+    start_menu
+    high_score_menu
+
   end
   
   def start_menu
-    @title = "GALAXOID"
-    @title_x = 205
-    @title_y = 130
-    @game_start = "Press Enter to Start!"
-    @game_start_x = 250
-    @game_start_y = 210
-    @game_title = Text.create(@title, :font => "fonts/phaserbank.ttf", :size => 70,
-                              :color => Color::GREEN,
-                              :x => @title_x, :y => @title_y)
-    @game_start = Text.create(@game_start, :font => "fonts/phaserbank.ttf", :size => 28,
-                              :color => Color::WHITE,
-                              :x => @game_start_x, :y => @game_start_y)
-    fill_rect([100,100,600,400], Color::GREEN, 1)
-    fill_rect([105,105,590,390], Color::BLUE, 2)
-    fill_rect([110,110,580,380], Color::BLACK, 3)
+    title = "GALAXOID"
+    title_y = 120
+    game_start = "Press Enter to Start!"
+    game_start_y = 210
+    
+    Text.create(title, :font => @default_font, :size => 90,
+                :color => Color::GREEN,
+                :x => @center_x + 5, :y => title_y, :rotation_center => :center_top)
+
+    Text.create(game_start, :font => @default_font, :size => 28,
+                :color => Color::YELLOW,
+                :x => @center_x, :y => game_start_y, :rotation_center => :center_top)
   end
 
   def high_score_menu
 
+    high_score_title = "-- High Scores --"
+    high_score_title_x = 315
+    high_score_title_y = 275
+  
+    Text.create(high_score_title, :font => @default_font, :size => 20, :color => Color::GREEN,
+                :x => @center_x, :y => high_score_title_y, :rotation_center => :center_top)
+                                    
     @high_score_list.each_with_index do |high_score, index|
       y = index * 25 + 310
-      Text.create(high_score[:name], :font => "fonts/phaserbank.ttf", :x => 236, :y => y, :size => 20, :rotation_center => :top_left)
-      Text.create(high_score[:score], :font => "fonts/phaserbank.ttf", :x => 566, :y => y, :size => 20, :rotation_center => :top_right)
+      Text.create(high_score[:name], :font => @default_font, :x => 226, :y => y, :size => 20,
+                  :rotation_center => :top_left)
+      Text.create(high_score[:score], :font => @default_font, :x => 576, :y => y, :size => 20,
+                  :rotation_center => :top_right)
     end
 
-    @high_score_title_text = "-- High Scores --"
-    @high_score_title_x = 315
-    @high_score_title_y = 275
-    @high_score_title = Text.create(@high_score_title_text, :font => "fonts/phaserbank.ttf", :size => 20,
-                              :color => Color::GREEN,
-                              :x => @high_score_title_x, :y => @high_score_title_y)
-    fill_rect([200,260,400,220], Color::WHITE, 4)
-    fill_rect([202,262,396,216], Color::BLACK, 6)
   end
   
   def debug   
@@ -70,13 +72,34 @@ class StartMenu < Chingu::GameState
   end
 
   def draw
-    start_menu
-    high_score_menu
-    $window.caption = "GALAXOID"
+    #$window.caption = "GALAXOID"
+    
+    # Start menu boxes
+    @start_green_rect = Rect.new(@center_x,@center_y,600,400)
+    @start_green_rect.center=([@center_x,@center_y])
+    fill_rect(@start_green_rect, Color::GREEN, 1)
+    
+    @start_blue_rect = Rect.new(@center_x,@center_y,590,390)
+    @start_blue_rect.center=([@center_x,@center_y])
+    fill_rect(@start_blue_rect, Color::BLUE, 2)
+    
+    @start_black_rect = Rect.new(@center_x,@center_y,580,380)
+    @start_black_rect.center=([@center_x,@center_y])
+    fill_rect(@start_black_rect, Color::BLACK, 3)
+
+    # High score boxes
+    @score_white_rect = Rect.new(@center_x,260,400,220)
+    @score_white_rect.centerx=(@center_x)
+    fill_rect(@score_white_rect, Color::WHITE, 4)
+
+    @score_black_rect = Rect.new(@center_x,262,396,216)
+    @score_black_rect.centerx=(@center_x)
+    fill_rect(@score_black_rect, Color::BLACK, 6)
+    
+    @background
+
+    $window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
     super
   end
 
-  def update
-    super
-  end  
 end

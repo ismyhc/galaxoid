@@ -1,5 +1,6 @@
 class ScoreBonus < Chingu::GameObject
-  traits :collision_detection, :bounding_circle, :timer
+  trait :bounding_box, :debug => false, :scale => 0.6
+  traits :collision_detection, :timer
   attr_accessor :color
   
   def initialize(options ={})
@@ -7,10 +8,10 @@ class ScoreBonus < Chingu::GameObject
     @mode = :default
     
     @score_bonus_sound = Sound["score_bonus.ogg"]
-    
     @score_bonus_speed = rand(5...6)
     @score_bonus_image_width = 24
     @score_bonus_image_height = 24
+    
     @x = rand($window.width - @score_bonus_image_width)
     @y = @score_bonus_image_height / 2
 
@@ -25,7 +26,7 @@ class ScoreBonus < Chingu::GameObject
     @last_x, @last_y = @x, @y
     update
 
-    cache_bounding_circle # This does a lot for performance
+    cache_bounding_box # This does a lot for performance
 
   end
   
@@ -38,13 +39,12 @@ class ScoreBonus < Chingu::GameObject
       @y = @y + @score_bonus_speed
     end
 
-    #self.factor = 2
     @image = @animation[@frame_name].next
 
   end
   
   def die!
-    @score_bonus_sound.play
+    @score_bonus_sound.play(0.8, 1.5)
     self.reset!
   end
   
