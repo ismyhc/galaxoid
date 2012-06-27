@@ -1,4 +1,5 @@
 class Play < Chingu::GameState
+
   traits :timer, :effect
   
   class << self
@@ -6,14 +7,16 @@ class Play < Chingu::GameState
   end
   
   def setup    
+
     self.input = { [:q, :escape] => :exit, :p => :pause,
                    [:holding_a, :holding_left, :holding_pad_left] => :camera_left, 
                    [:holding_d, :holding_right, :holding_pad_right] => :camera_right, 
                    [:holding_w, :holding_up, :holding_pad_up] => :camera_up, 
                    [:holding_s, :holding_down, :holding_pad_down] => :camera_down } 
 
+    @background = Image["outerspace_pattern.jpg"]
     @parallax = Chingu::Parallax.create(:x => 0, :y => 0, :rotation_center => :top_left, :zorder => 5)
-    @parallax << { :image => "outerspace_pattern.jpg", :damping => 1, :repeat_x => true, :repeat_y => true }
+    @parallax << { :image => @background, :damping => 1, :repeat_x => true, :repeat_y => true }
     
     @song = Sound["song1.ogg"].play(0.8, 0.9, true)
     @running = true

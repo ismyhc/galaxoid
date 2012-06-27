@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'chingu'
+gem 'chingu', "0.8.1"
 gem 'rest-client'
 gem 'crack', require: 'crack/xml'
 
