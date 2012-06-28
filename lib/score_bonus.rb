@@ -8,7 +8,7 @@ class ScoreBonus < Chingu::GameObject
     @mode = :default
     
     @score_bonus_sound = Sound["score_bonus.ogg"]
-    @score_bonus_speed = rand(5...6)
+    @score_bonus_speed = rand(2) + 5
     @score_bonus_image_width = 24
     @score_bonus_image_height = 24
     

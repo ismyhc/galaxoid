@@ -11,7 +11,6 @@ class StartMenu < Chingu::GameState
     @background = Image["outerspace_pattern.jpg"]
     @select_sound = Sound["select.ogg"]
     after(1000) { @song.play(false) }
-    @default_font = "fonts/phaserbank.ttf"
 
     begin
       @high_score_list = OnlineHighScoreList.load(:game_id => "31", :login => "galaxiod", :password => "misterbug", :limit => 6)
@@ -30,11 +29,11 @@ class StartMenu < Chingu::GameState
     game_start = "Press Enter to Start!"
     game_start_y = 210
     
-    Text.create(title, :font => @default_font, :size => 90,
+    Text.create(title, :font => $default_font, :size => 90,
                 :color => Color::GREEN,
                 :x => @center_x + 5, :y => title_y, :rotation_center => :center_top)
 
-    Text.create(game_start, :font => @default_font, :size => 28,
+    Text.create(game_start, :font => $default_font, :size => 28,
                 :color => Color::YELLOW,
                 :x => @center_x, :y => game_start_y, :rotation_center => :center_top)
   end
@@ -45,14 +44,14 @@ class StartMenu < Chingu::GameState
     high_score_title_x = 315
     high_score_title_y = 275
   
-    Text.create(high_score_title, :font => @default_font, :size => 20, :color => Color::GREEN,
+    Text.create(high_score_title, :font => $default_font, :size => 20, :color => Color::GREEN,
                 :x => @center_x, :y => high_score_title_y, :rotation_center => :center_top)
                                     
     @high_score_list.each_with_index do |high_score, index|
       y = index * 25 + 310
-      Text.create(high_score[:name], :font => @default_font, :x => 226, :y => y, :size => 20,
+      Text.create(high_score[:name], :font => $default_font, :x => 226, :y => y, :size => 20,
                   :rotation_center => :top_left)
-      Text.create(high_score[:score], :font => @default_font, :x => 576, :y => y, :size => 20,
+      Text.create(high_score[:score], :font => $default_font, :x => 576, :y => y, :size => 20,
                   :rotation_center => :top_right)
     end
 

@@ -7,7 +7,7 @@ class Enemy < Chingu::GameObject
     super
     @mode = :default
     
-    @enemy_speed = rand(5...12)
+    @enemy_speed = rand(7) + 5
     @enemy_image_width = 10 * 3
     @enemy_image_height = 10 * 3
     @x = rand($window.width - @enemy_image_width)
@@ -16,7 +16,7 @@ class Enemy < Chingu::GameObject
     @color = @color_array.sample
 
     # Load the full animation from vertical sprite strip
-    @animation_delay = rand(100...500)
+    @animation_delay = rand(400) + 100
     @animation = Chingu::Animation.new(:file => "enemy_10x10.png", :delay => @animation_delay)
     @animation.frame_names = { :main => 0...3 }
     

@@ -21,6 +21,8 @@ class Main < Chingu::Window
     Gosu::Sound.autoload_dirs << File.expand_path("../sounds", __FILE__)
     Gosu::Song.autoload_dirs << File.expand_path("../songs", __FILE__)
     Gosu::Font.autoload_dirs << File.expand_path("../fonts", __FILE__)
+    $default_font = File.expand_path("../lib/fonts/phaserbank.ttf", File.dirname(__FILE__))
+    
     retrofy
     push_game_state(StartMenu)
   end

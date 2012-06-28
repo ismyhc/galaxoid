@@ -7,8 +7,6 @@ class HighScore < Chingu::GameState
     @center_x = $window.width / 2
     @center_y = $window.height / 2
     
-    @default_font = "fonts/phaserbank.ttf"
-
     @song = Song["end.ogg"]
     after(1000) { @song.play(true) }
     
@@ -80,26 +78,26 @@ class HighScore < Chingu::GameState
 
     @high_score_list.each_with_index do |high_score, index|
       y = index * 25 + 151
-      Text.create(high_score[:name], :font => @default_font, :x => 236, :y => y, :size => 20, :rotation_center => :top_left)
-      Text.create(high_score[:score], :font => @default_font, :x => 566, :y => y, :size => 20, :rotation_center => :top_right)
+      Text.create(high_score[:name], :font => $default_font, :x => 236, :y => y, :size => 20, :rotation_center => :top_left)
+      Text.create(high_score[:score], :font => $default_font, :x => 566, :y => y, :size => 20, :rotation_center => :top_right)
     end
     
     # Game over text
     game_over_y = 18
     game_over = "GAME OVER"
-    Text.create(game_over, :font => @default_font, :size => 70,
+    Text.create(game_over, :font => $default_font, :size => 70,
                 :color => Color::GREEN,
                 :x => @center_x + 5, :y => game_over_y, :rotation_center => :top_center)
     # Player score text
     player_score_y = 72
     player_score_text = " Your score: <c=ffff00>#{HighScore.the_score.to_s}</c> "
-    Text.create(player_score_text, :font => @default_font, :size => 40,
+    Text.create(player_score_text, :font => $default_font, :size => 40,
                 :x => @center_x, :y => player_score_y, :rotation_center => :top_center)
     
     # High Score text       
     high_score_title_text = "-- High Scores --"
     high_score_title_y = 120
-    Text.create(high_score_title_text, :font => @default_font, :size => 20,
+    Text.create(high_score_title_text, :font => $default_font, :size => 20,
                 :color => Color::YELLOW,
                 :x => @center_x, :y => high_score_title_y, :zorder => 8, :rotation_center => :top_center)
 
@@ -112,7 +110,7 @@ class HighScore < Chingu::GameState
 
     # Enter name text
     enter_name_text_y = 560
-    Text.create(enter_name_text, :font => @default_font, :size => 20,
+    Text.create(enter_name_text, :font => $default_font, :size => 20,
                 :color => Color::YELLOW,
                 :x => @center_x, :y => enter_name_text_y, :zorder => 8, :rotation_center => :top_center)
 

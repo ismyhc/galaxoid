@@ -9,7 +9,7 @@ class LifeBonus < Chingu::GameObject
     
     @life_bonus_sound = Sound["life_bonus.ogg"]
     
-    @life_bonus_speed = rand(5...8)
+    @life_bonus_speed = rand(3) + 5
     @life_bonus_image_width = 10 * 3
     @life_bonus_image_height = 10 * 3
     @x = rand($window.width - @life_bonus_image_width)

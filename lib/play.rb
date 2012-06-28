@@ -21,10 +21,7 @@ class Play < Chingu::GameState
     @song = Sound["song1.ogg"].play(0.8, 0.9, true)
     @running = true
     @score = 0
-    @score_font = Gosu::Font.new($window, "fonts/phaserbank.ttf", 20)
-    @default_font = "fonts/phaserbank.ttf"
     
-
     # Setup and create player
     @player = Player.create(:x => @x, :y => @y)
     @player.input = { [:holding_a, :holding_left, :holding_pad_left] => :move_left, 
@@ -40,8 +37,8 @@ class Play < Chingu::GameState
     every(30000) { 2.times { @enemy << new_enemy } }
 
     # Setup bonus objects
-    life_bonus_time = rand(5000...20000)
-    score_bonus_time = rand(3000...16000)
+    life_bonus_time = rand(15000) + 5000
+    score_bonus_time = rand(13000) + 3000
     every(life_bonus_time) { @life_bonus = new_life_bonus }
     every(score_bonus_time) { @score_bonus = new_score_bonus }
 
@@ -76,7 +73,7 @@ class Play < Chingu::GameState
   end
   
   def action_message(action, text, text_color, y)
-    message = Text.create("#{action} #{text_color}#{text}</c>", :font => @default_font, :x => 10, :y => y, :size => 20)
+    message = Text.create("#{action} #{text_color}#{text}</c>", :font => $default_font, :x => 10, :y => y, :size => 20)
     after(1000) { message.destroy! }
   end
   
@@ -84,6 +81,7 @@ class Play < Chingu::GameState
     if @running
       super
       @score = @score + 1
+ #     @score_font = Chingu::Text.new("Current Score: <c=fff000>#{@score}</c>", :font => "fonts/phaserbank.ttf", :size => 20, :x => 10, :y => 10, :zorder => 20)
     
       # Player collision with Enemies
       @player.each_bounding_box_collision(@enemy) do |player, enemy|
@@ -116,7 +114,7 @@ class Play < Chingu::GameState
       @player.each_bounding_box_collision(@score_bonus) do |player, score_bonus|
         score_bonus.die!
         
-        bonus = rand(100...3000)
+        bonus = rand(2900) + 100
         @score = @score + bonus
         
         action_message("Score", "+#{bonus}", "<c=fff000>",  100)
@@ -124,7 +122,7 @@ class Play < Chingu::GameState
       
       Bullet.each_bounding_box_collision(@enemy) do |bullet, enemy|
 
-        bonus = rand(100...2000) + (enemy.x + bullet.x)
+        bonus = (rand(1900) + 100) + (enemy.x + bullet.x)
         enemy.die!
         @bullet_death.play
         bullet.die!
@@ -163,8 +161,8 @@ class Play < Chingu::GameState
   end
   
   def draw
-    @score_font.draw("Current Score: <c=fff000>#{@score}</c>", 10, 10, 20)
     life_bar(@player.life)
+    @score_font = Chingu::Text.new("Current Score: <c=fff000>#{@score}</c>", :font => $default_font, :size => 20, :x => 10, :y => 10, :zorder => 20).draw
     $window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
     super
   end
