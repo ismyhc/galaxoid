@@ -9,8 +9,8 @@ Releasy::Project.new do
 
   executable "lib/main.rb"
   verbose
-  files ['lib/*.rb', 'lib/images/*.*', 'lib/fonts/*.*', 'lib/songs/*.*', 'lib/sounds/*.*']
-  exposed_files "README.markdown"
+  files ['lib/*.rb', 'lib/images/*.*', 'lib/fonts/*.*', 'lib/songs/*.*', 'lib/sounds/*.*', 'lib/config/*.*']
+  #exposed_files "README.markdown"
   add_link "http://github.com/ismyhc/galaxoid", "Galaxoid Github"
   exclude_encoding # Applications that don't use advanced encoding (e.g. Japanese characters) can save build size with this.
 

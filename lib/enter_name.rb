@@ -4,7 +4,7 @@ class EnterName < Chingu::GameState
     super
     
     @title = options[:title] || "<u>Please enter your name</u>"
-    Text.create(@title, :rotation_center => :top_center, :font => "fonts/phaserbank.ttf",
+    Text.create(@title, :rotation_center => :top_center, :font => $default_font,
                 :x => $window.width/2, :y => 30, :size => 30)
 
     on_input([:holding_up, :holding_w, :holding_gamepad_up], :up)
@@ -27,7 +27,7 @@ class EnterName < Chingu::GameState
     @x = ($window.width - 600)/2
     
     @letters.each_with_index do |letter, index|
-      @texts << Text.create(letter, :font => "fonts/phaserbank.ttf", :x => @x, :y => @y, :size => @letter_size)
+      @texts << Text.create(letter, :font => $default_font, :x => @x, :y => @y, :size => @letter_size)
       @x += @texts.last.width + 20
       
       if (index+1) % @columns == 0
@@ -37,7 +37,7 @@ class EnterName < Chingu::GameState
     end
   
     @texts[@index].color = ::Gosu::Color::GREEN
-    @name = Text.create("", :font => "fonts/phaserbank.ttf", :rotaion_center => :top_center, :x => $window.width/2, :y => 60, :size => 80)
+    @name = Text.create("", :font => $default_font, :rotaion_center => :top_center, :x => $window.width/2, :y => 60, :size => 80)
   end
 
   # Move cursor 1 step to the left
