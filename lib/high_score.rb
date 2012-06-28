@@ -7,8 +7,8 @@ class HighScore < Chingu::GameState
     @center_x = $window.width / 2
     @center_y = $window.height / 2
     
-    @song = Song["end.ogg"]
-    after(1000) { @song.play(true) }
+    @song = Song["start.ogg"]
+    after(100) { @song.play(true) }
     
     begin
       @high_score_list = OnlineHighScoreList.load(:game_id => "31", :login => "galaxoid",
@@ -126,7 +126,8 @@ class HighScore < Chingu::GameState
     @score_black_rect.centerx=(@center_x)
     fill_rect(@score_black_rect, Color::BLACK, 6)
 
-    $window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
+    #$window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
+    $window.caption = "GALAXOID - GAME OVER"
 
     super
   end  

@@ -163,7 +163,8 @@ class Play < Chingu::GameState
   def draw
     life_bar(@player.life)
     @score_font = Chingu::Text.new("Current Score: <c=fff000>#{@score}</c>", :font => $default_font, :size => 20, :x => 10, :y => 10, :zorder => 20).draw
-    $window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
+    #$window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
+    $window.caption = "GALAXOID"
     super
   end
 end

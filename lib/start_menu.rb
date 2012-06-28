@@ -97,7 +97,9 @@ class StartMenu < Chingu::GameState
     
     @background
 
-    $window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
+    #$window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
+    $window.caption = "GALAXOID"
+    
     super
   end
 
