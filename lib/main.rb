@@ -28,4 +28,5 @@ class Main < Chingu::Window
   end
 end
 
+exit if defined? Ocra
 Main.new.show

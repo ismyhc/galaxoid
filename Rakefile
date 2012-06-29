@@ -45,5 +45,11 @@ Releasy::Project.new do
     add_package :exe
   end
 
+  add_build :windows_standalone do
+    icon "icons/icon.ico"
+    executable_type :windows # Assuming you don't want it to run with a console window.
+    add_package :exe
+  end
+
 end
 #>>>
