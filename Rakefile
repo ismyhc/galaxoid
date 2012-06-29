@@ -24,7 +24,6 @@ Releasy::Project.new do
   
   # If unable to build on a Windows machine, :windows_wrapped is the only choice.
   add_build :windows_wrapped do
-    icon "icons/icon.ico"
     wrapper "wrappers/ruby-1.9.3-p0-i386-mingw32.7z" # Assuming this is where you downloaded this file.
     executable_type :windows # Assuming you don't want it to run with a console window.
     exclude_tcl_tk # Assuming application doesn't use Tcl/Tk, then it can save a lot of size by using this.
@@ -33,11 +32,17 @@ Releasy::Project.new do
 
   add_build :windows_installer do
     icon "icons/icon.ico"
-    start_menu_group "Spooner Games"
+    start_menu_group "Galaxoid-Alpha-v_0_1"
     readme "README.markdown" # User asked if they want to view readme after install.
     license "LICENSE.txt" # User asked to read this and confirm before installing.
     executable_type :windows # Assuming you don't want it to run with a console window.
     add_package :zip
+  end
+
+  add_build :windows_folder do
+    icon "icons/icon.ico"
+    executable_type :windows # Assuming you don't want it to run with a console window.
+    add_package :exe
   end
 
 end
