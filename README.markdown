@@ -8,6 +8,7 @@ You can try out the Alpha version 0.1 for OSX!
 
 If you want to run from source:
 
-	git clone  
-	bundle install  
-	ruby lib/main.rb     
+	git clone https://github.com/ismyhc/galaxoid.git  
+	cd galaxoid  
+	bundle install    
+	ruby lib/main.rb  
