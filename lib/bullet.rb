@@ -7,7 +7,7 @@ class Bullet < Chingu::GameObject
     super(options.merge(:image => Image["bullet_3x3.png"]))
     
     @sound = Sound["laser.ogg"]
-    @sound.play(2.0, 1.0, false)
+    @sound.play(0.8, 1.0, false)
     
     self.factor = 3
     

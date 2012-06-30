@@ -43,12 +43,12 @@ class Player < Chingu::GameObject
     when 1
       Bullet.create(:x => @x, :y => @y)
     when 2
-      Bullet.create(:x => @x - 15, :y => @y)
-      Bullet.create(:x => @x + 15, :y => @y)
+      Bullet.create(:x => @x - 17, :y => @y)
+      Bullet.create(:x => @x + 17, :y => @y)
     when 3
-      Bullet.create(:x => @x - 15, :y => @y)
+      Bullet.create(:x => @x - 17, :y => @y)
       Bullet.create(:x => @x, :y => @y)
-      Bullet.create(:x => @x + 15, :y => @y)
+      Bullet.create(:x => @x + 17, :y => @y)
     else
       Bullet.create(:x => @x, :y => @y)
     end

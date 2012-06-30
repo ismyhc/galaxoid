@@ -65,9 +65,9 @@ class HighScore < Chingu::GameState
   def update
     
     if !defined? @disable_enter_name
-      self.input = {:esc => :exit, :a => :enter_name, :return => :restart_game}
+      self.input = {:esc => :restart_game, :a => :enter_name}
     elsif @disable_enter_name == "true"
-      self.input = {:esc => :exit, :a => :disabled_enter_name, :return => :restart_game}
+      self.input = {:esc => :restart_game, :a => :disabled_enter_name, :return => :restart_game}
     end
 
   end
@@ -103,16 +103,22 @@ class HighScore < Chingu::GameState
 
     # Display directions to enter name
     if !defined? @disable_enter_name
-      enter_name_text = " - Press a to enter your name - "
+      enter_name_text1 = " - A - Enter your name - "
+      enter_name_text2 = " - ESC - Try again! - "
     elsif @disable_enter_name == "true"
-      enter_name_text = " - Press enter to try again! - "
+      enter_name_text1 = " - ESC - Try again! - "
+      enter_name_text2 = ""
     end
 
     # Enter name text
-    enter_name_text_y = 560
-    Text.create(enter_name_text, :font => $default_font, :size => 20,
+    enter_name_text1_y = 550
+    enter_name_text2_y = 570
+    Text.create(enter_name_text1, :font => $default_font, :size => 20,
                 :color => Color::YELLOW,
-                :x => @center_x, :y => enter_name_text_y, :zorder => 8, :rotation_center => :top_center)
+                :x => @center_x, :y => enter_name_text1_y, :zorder => 8, :rotation_center => :top_center)
+    Text.create(enter_name_text2, :font => $default_font, :size => 20,
+                :color => Color::YELLOW,
+                :x => @center_x, :y => enter_name_text2_y, :zorder => 8, :rotation_center => :top_center)
 
   end
 

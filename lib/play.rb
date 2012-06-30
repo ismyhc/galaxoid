@@ -155,7 +155,7 @@ class Play < Chingu::GameState
 
         bonus = (rand(1900) + 100) + (enemy.y + bullet.y)
         enemy.die!
-        @bullet_death.play
+        @bullet_death.play(0.2)
         bullet.die!
         
         @score = @score + bonus

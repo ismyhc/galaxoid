@@ -6,7 +6,7 @@ class WeaponBonus < Chingu::GameObject
   def initialize(options)
     super(options.merge(:image => Image["bullet_3x3.png"]))
     
-    @sound = Sound["life_bonus.ogg"]
+    @sound = Sound["weapons_upgrade.ogg"]
     #@sound.play(2.0, 1.0, false)
     @x = rand($window.width / 2)
     @y = 0
@@ -30,7 +30,7 @@ class WeaponBonus < Chingu::GameObject
   end
   
   def die!
-    @sound.play(0.8, 1.5)
+    @sound.play(1.0)
     self.reset!
   end
   
