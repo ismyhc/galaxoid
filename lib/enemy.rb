@@ -1,5 +1,5 @@
 class Enemy < Chingu::GameObject
-  trait :bounding_box, :debug => false, :scale => 0.5
+  trait :bounding_box, :debug => true, :scale => 0.5
   traits :collision_detection, :timer
   attr_accessor :color
   
@@ -31,15 +31,21 @@ class Enemy < Chingu::GameObject
   end
   
   def update
-                
-    if @y >= $window.height
-      @y = 0
-      @x = rand($window.width)
+           
+    self.factor = 3
+    if self.outside_window?
+      self.reset!
     else
       @y = @y + @enemy_speed
     end
+    
+ #   if @y >= $window.height
+  #    die!
+   #   @x = rand($window.width)
+  #  else
+   #   @y = @y + @enemy_speed
+  #  end
 
-    self.factor = 3
     @image = @animation[@frame_name].next
 
   end
@@ -49,8 +55,8 @@ class Enemy < Chingu::GameObject
   end
   
   def reset!
+    @y = @enemy_image_height / 2
     @x = rand($window.width - @enemy_image_width)
-    @y = 0
   end
   
 end

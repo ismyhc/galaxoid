@@ -24,11 +24,13 @@ class Play < Chingu::GameState
     
     # Setup and create player
     @player = Player.create(:x => @x, :y => @y)
+#    @player.bullet_pattern(1)
+    set_bullet_pattern(1)
     @player.input = { [:holding_a, :holding_left, :holding_pad_left] => :move_left, 
                       [:holding_d, :holding_right, :holding_pad_right] => :move_right, 
                       [:holding_w, :holding_up, :holding_pad_up] => :move_up, 
                       [:holding_s, :holding_down, :holding_pad_down] => :move_down,
-                      [:space, :return, :pad_button_2] => :fire_bullet }
+                      [:space, :return, :pad_button_2] => :fire_bullet  }
                       
     @bullet_death = Sound["bullet_death.ogg"]
     # Setup and create enemies
@@ -39,8 +41,10 @@ class Play < Chingu::GameState
     # Setup bonus objects
     life_bonus_time = rand(15000) + 5000
     score_bonus_time = rand(13000) + 3000
+    weapon_bonus_time = rand(10000) + 20000
     every(life_bonus_time) { @life_bonus = new_life_bonus }
     every(score_bonus_time) { @score_bonus = new_score_bonus }
+    every(weapon_bonus_time) { @weapon_bonus = new_weapon_bonus }
 
   end
   
@@ -57,7 +61,11 @@ class Play < Chingu::GameState
   end
 
   def camera_down
-    @parallax.camera_y += 1
+    @parallax.camera_y += 0.5
+  end
+  
+  def set_bullet_pattern(pattern)
+    @player.bullet_pattern(pattern)
   end
   
   def new_enemy
@@ -72,16 +80,22 @@ class Play < Chingu::GameState
     ScoreBonus.create(:x => @x, :y => @y)
   end
   
+  def new_weapon_bonus
+    WeaponBonus.create(:x => @x, :y => @y)
+  end
+  
   def action_message(action, text, text_color, y)
+    Text.destroy_all
+      
     message = Text.create("#{action} #{text_color}#{text}</c>", :font => $default_font, :x => 10, :y => y, :size => 20)
-    after(1000) { message.destroy! }
+    after(2000) { message.destroy! }
   end
   
   def update
     if @running
       super
+      @parallax.camera_y -= 2
       @score = @score + 1
- #     @score_font = Chingu::Text.new("Current Score: <c=fff000>#{@score}</c>", :font => "fonts/phaserbank.ttf", :size => 20, :x => 10, :y => 10, :zorder => 20)
     
       # Player collision with Enemies
       @player.each_bounding_box_collision(@enemy) do |player, enemy|
@@ -98,23 +112,40 @@ class Play < Chingu::GameState
 
       # Player collisions with Life Bonuses
       @player.each_bounding_box_collision(@life_bonus) do |player, life_bonus|
+        puts "Player at: #{player.x}, #{player.y}"
+        puts "Life bonus at: #{life_bonus.x}, #{life_bonus.y}"
         life_bonus.die!
 
         if @player.life_points >= 100
-          @score = @score + 500
-          action_message("Score", "+500", "<c=fff000>",  80)
+          @score = @score + 5000
+          action_message("Score", "+5000", "<c=fff000>",  80)
         else
           player.life_bonus!
           action_message("HP", "+20", "<c=00ff00>",  80)
         end
         
       end
+      
+      # Player collisions with Weapons Bonuses
+      @player.each_bounding_box_collision(@weapon_bonus) do |player, weapon_bonus|
+        puts "Player at: #{player.x}, #{player.y}"
+        puts "Weapon bonus at: #{weapon_bonus.x}, #{weapon_bonus.y}"
+        weapon_bonus.die!
+        set_bullet_pattern(3)
+        after(10000) { set_bullet_pattern(2) }
+        after(20000) { set_bullet_pattern(1) }
+
+        action_message("Weapon", "Upgrade!", "<c=00ff00>",  80)
+        
+      end
 
       # Player collisions with Score Bonuses
       @player.each_bounding_box_collision(@score_bonus) do |player, score_bonus|
+        puts "Player at: #{player.x}, #{player.y}"
+        puts "Score bonus at: #{score_bonus.x}, #{score_bonus.y}"
         score_bonus.die!
         
-        bonus = rand(2900) + 100
+        bonus = rand(1500) + 5000
         @score = @score + bonus
         
         action_message("Score", "+#{bonus}", "<c=fff000>",  100)
@@ -122,7 +153,7 @@ class Play < Chingu::GameState
       
       Bullet.each_bounding_box_collision(@enemy) do |bullet, enemy|
 
-        bonus = (rand(1900) + 100) + (enemy.x + bullet.x)
+        bonus = (rand(1900) + 100) + (enemy.y + bullet.y)
         enemy.die!
         @bullet_death.play
         bullet.die!
@@ -163,8 +194,8 @@ class Play < Chingu::GameState
   def draw
     life_bar(@player.life)
     @score_font = Chingu::Text.new("Current Score: <c=fff000>#{@score}</c>", :font => $default_font, :size => 20, :x => 10, :y => 10, :zorder => 20).draw
-    #$window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
-    $window.caption = "GALAXOID"
+    $window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
+    #$window.caption = "GALAXOID"
     super
   end
 end

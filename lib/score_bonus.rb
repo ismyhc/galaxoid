@@ -32,9 +32,8 @@ class ScoreBonus < Chingu::GameObject
   
   def update
                 
-    if @y >= $window.height
-      self.destroy!
-      @x = rand($window.width)
+    if self.outside_window?
+      self.reset!
     else
       @y = @y + @score_bonus_speed
     end
@@ -49,8 +48,9 @@ class ScoreBonus < Chingu::GameObject
   end
   
   def reset!
-    @y = 0
+    @y = $window.height * 2
     self.destroy!
+    @x = rand($window.width)
   end
   
 end

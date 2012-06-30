@@ -1,5 +1,5 @@
 class Player < Chingu::GameObject
-  trait :bounding_box, :debug => false, :scale => 0.8
+  trait :bounding_box, :debug => true, :scale => 0.8
   traits :collision_detection, :timer
   attr_accessor :color
   
@@ -16,7 +16,6 @@ class Player < Chingu::GameObject
     @y = ($window.height - @player_image_height)
     @color = Gosu::Color.argb(0xffff8b40)
     @life_points = 100
- 
     # Load the full animation from tile-file
     @animation = Chingu::Animation.new(:file => "player_10x10.png", :delay => 300, :bounce => true)
     @animation.frame_names = { :main => 0..2 }
@@ -34,9 +33,26 @@ class Player < Chingu::GameObject
   def life
     @life_points
   end
+
+  def bullet_pattern(pattern)
+    @bullet_pattern = pattern
+  end
   
   def fire_bullet
-    Bullet.create(:x => @x, :y => @y)
+    case @bullet_pattern
+    when 1
+      Bullet.create(:x => @x, :y => @y)
+    when 2
+      Bullet.create(:x => @x - 15, :y => @y)
+      Bullet.create(:x => @x + 15, :y => @y)
+    when 3
+      Bullet.create(:x => @x - 15, :y => @y)
+      Bullet.create(:x => @x, :y => @y)
+      Bullet.create(:x => @x + 15, :y => @y)
+    else
+      Bullet.create(:x => @x, :y => @y)
+    end
+
   end
   
   def fire_bullets

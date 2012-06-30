@@ -1,5 +1,5 @@
 class LifeBonus < Chingu::GameObject
-  trait :bounding_box, :debug => false, :scale => 0.8
+  trait :bounding_box, :debug => true, :scale => 0.8
   traits :collision_detection, :timer
   attr_accessor :color
   
@@ -30,15 +30,14 @@ class LifeBonus < Chingu::GameObject
   end
   
   def update
-                
-    if @y >= $window.height
-      self.destroy!
-      @x = rand($window.width)
+           
+    self.factor = 3
+    if self.outside_window?
+      self.reset!
     else
       @y = @y + @life_bonus_speed
     end
-
-    self.factor = 3
+       
     @image = @animation[@frame_name].next
 
   end
@@ -49,8 +48,9 @@ class LifeBonus < Chingu::GameObject
   end
   
   def reset!
-    @y = 0
+    @y = $window.height * 2
     self.destroy!
+    @x = rand($window.width)
   end
   
 end

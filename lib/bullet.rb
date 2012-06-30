@@ -1,6 +1,6 @@
 class Bullet < Chingu::GameObject
   
-  trait :bounding_box, :debug => false, :scale => 1.0
+  trait :bounding_box, :debug => false, :scale => 3.0
   traits :collision_detection, :timer
 
   def initialize(options)
