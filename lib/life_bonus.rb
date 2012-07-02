@@ -1,5 +1,5 @@
 class LifeBonus < Chingu::GameObject
-  trait :bounding_box, :debug => true, :scale => 0.8
+  trait :bounding_box, :debug => false, :scale => 0.8
   traits :collision_detection, :timer
   attr_accessor :color
   

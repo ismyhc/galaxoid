@@ -6,6 +6,7 @@ class StartMenu < Chingu::GameState
     @center_x = $window.width / 2
     @center_y = $window.height / 2
 
+    $window.caption = "GALAXOID"
     self.input = { :f1 => :debug, [:q, :escape] => :exit, :return => :load }
     @song = Song["start.ogg"]
     @background = Image["outerspace_pattern.jpg"]
@@ -17,6 +18,8 @@ class StartMenu < Chingu::GameState
    rescue
       @high_score_list = HighScoreList.load(:size => 6)
    end
+   
+    $hs = @high_score_list[0][:score]
 
     start_menu
     high_score_menu
@@ -98,7 +101,7 @@ class StartMenu < Chingu::GameState
     @background
 
     #$window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
-    $window.caption = "GALAXOID"
+    #$window.caption = "GALAXOID"
     
     super
   end

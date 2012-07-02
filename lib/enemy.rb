@@ -1,5 +1,5 @@
 class Enemy < Chingu::GameObject
-  trait :bounding_box, :debug => true, :scale => 0.5
+  trait :bounding_box, :debug => false, :scale => 0.5
   traits :collision_detection, :timer
   attr_accessor :color
   
@@ -11,7 +11,7 @@ class Enemy < Chingu::GameObject
     @enemy_image_width = 10 * 3
     @enemy_image_height = 10 * 3
     @x = rand($window.width - @enemy_image_width)
-    @y = @enemy_image_height / 2
+    @y = (@enemy_image_height / 2)
     @color_array = [Gosu::Color.argb(0xff2CFF00), Gosu::Color.argb(0xff70ed3b), Gosu::Color.argb(0xff34D2AF)]
     @color = @color_array.sample
 
@@ -39,13 +39,6 @@ class Enemy < Chingu::GameObject
       @y = @y + @enemy_speed
     end
     
- #   if @y >= $window.height
-  #    die!
-   #   @x = rand($window.width)
-  #  else
-   #   @y = @y + @enemy_speed
-  #  end
-
     @image = @animation[@frame_name].next
 
   end
@@ -55,7 +48,7 @@ class Enemy < Chingu::GameObject
   end
   
   def reset!
-    @y = @enemy_image_height / 2
+    @y = (@enemy_image_height / 2)
     @x = rand($window.width - @enemy_image_width)
   end
   

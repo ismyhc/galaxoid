@@ -1,6 +1,6 @@
 class WeaponBonus < Chingu::GameObject
   
-  trait :bounding_box, :debug => true, :scale => 1.5
+  trait :bounding_box, :debug => false, :scale => 1.5
   traits :collision_detection, :timer
 
   def initialize(options)
@@ -8,14 +8,14 @@ class WeaponBonus < Chingu::GameObject
     
     @sound = Sound["weapons_upgrade.ogg"]
     #@sound.play(2.0, 1.0, false)
-    @x = rand($window.width / 2)
+    @x = rand($window.width - 6)
     @y = 0
     
     self.factor = 6
     
-    @color = Color::RED
+    @color = Color::BLUE
 
-    @bullet_speed = rand(10) + 5
+    @speed = rand(10) + 3
   end
   
   def update
@@ -24,13 +24,13 @@ class WeaponBonus < Chingu::GameObject
       self.reset!
       @x = rand($window.width)
     else
-      @y = @y + @bullet_speed
+      @y = @y + @speed
     end
 
   end
   
   def die!
-    @sound.play(1.0)
+    @sound.play(0.8)
     self.reset!
   end
   

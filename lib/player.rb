@@ -1,5 +1,5 @@
 class Player < Chingu::GameObject
-  trait :bounding_box, :debug => true, :scale => 0.8
+  trait :bounding_box, :debug => false, :scale => 0.8
   traits :collision_detection, :timer
   attr_accessor :color
   
@@ -71,7 +71,7 @@ class Player < Chingu::GameObject
     else
       @x = @x - @player_speed
     end
-    @move_sound.play_pan(-100, 0.3, 2.0, false)
+    #@move_sound.play_pan(-100, 0.2, 2.0, false)
 
     @frame_name = :main
   end
@@ -82,7 +82,7 @@ class Player < Chingu::GameObject
     else
       @x = @x + @player_speed
     end
-    @move_sound.play_pan(100, 0.3, 2.0, false)
+    #@move_sound.play_pan(100, 0.2, 2.0, false)
 
     @frame_name = :main
   end
@@ -93,7 +93,7 @@ class Player < Chingu::GameObject
     else
       @y = @y - @player_speed
     end
-    @move_sound.play_pan(0, 0.3, 2.0, false)
+    #@move_sound.play_pan(0, 0.2, 2.0, false)
 
     @frame_name = :main
   end
@@ -104,7 +104,7 @@ class Player < Chingu::GameObject
     else
       @y = @y + @player_speed
     end
-    @move_sound.play_pan(0, 0.3, 2.0, false)
+    #@move_sound.play_pan(0, 0.2, 2.0, false)
 
     @frame_name = :main
   end
@@ -116,11 +116,8 @@ class Player < Chingu::GameObject
     
     self.factor = 4
 
-    #
-    # If droid stands still, use the scanning animation
-    #
     @frame_name = :main if @x == @last_x && @y == @last_y
-    #@color = Color::BLUE
+    #rescue @color
     
     
     
@@ -133,8 +130,10 @@ class Player < Chingu::GameObject
     if @life_points == 0
       @color = Color::RED
     end
+     # @color = Color::RED
+    #  after(300) { @color = nil }
     #@image = Image["hit.png"]
-    @hit_sound.play(0.8, 1.0, false)
+    @hit_sound.play(0.6, 1.0, false)
   end
   
   def life_points

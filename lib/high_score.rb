@@ -4,6 +4,7 @@ class HighScore < Chingu::GameState
   def setup
     super
     
+    $window.caption = "GALAXOID - GAME OVER"
     @center_x = $window.width / 2
     @center_y = $window.height / 2
     
@@ -133,7 +134,7 @@ class HighScore < Chingu::GameState
     fill_rect(@score_black_rect, Color::BLACK, 6)
 
     #$window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
-    $window.caption = "GALAXOID - GAME OVER"
+   # $window.caption = "GALAXOID - GAME OVER"
 
     super
   end  
