@@ -202,7 +202,7 @@ class Play < Chingu::GameState
           action_message("Score", "+#{bonus}", "<c=fff000>",  100)        
        
           enemy.async do |q|
-            q.tween(175, :alpha => 0, :x => enemy.x, :y => enemy.y, :angle => 180)
+            q.tween(250, :alpha => 0, :x => enemy.x, :y => enemy.y, :angle => 270)
             q.call :die!
           end
 
