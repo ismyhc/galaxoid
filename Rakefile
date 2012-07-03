@@ -32,7 +32,7 @@ Releasy::Project.new do
 
   add_build :windows_installer do
     icon "icons/icon.ico"
-    start_menu_group "Galaxoid-Alpha-v_0_1"
+    start_menu_group "Galaxoid-Alpha-v_0_2_WIN32"
     readme "README.markdown" # User asked if they want to view readme after install.
     license "LICENSE.txt" # User asked to read this and confirm before installing.
     executable_type :windows # Assuming you don't want it to run with a console window.
