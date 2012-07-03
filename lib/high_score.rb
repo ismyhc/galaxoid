@@ -12,14 +12,14 @@ class HighScore < Chingu::GameState
     after(100) { @song.play(true) }
     
     begin
-      @high_score_list = OnlineHighScoreList.load(:game_id => "31", :login => "galaxoid",
+      @high_score_list = OnlineHighScoreList.load(:game_id => "32", :login => "ga02",
                                                   :password => "misterbug", :limit => 16)
     rescue
       @high_score_list = HighScoreList.load(:size => 6)
     ensure
       #not sure why, but @the_score not set unless i wait?
       after(100) { create_text }
-    end
+  end
 
   end
   
@@ -55,7 +55,7 @@ class HighScore < Chingu::GameState
     begin
       position = @high_score_list.add(data)
     rescue
-      puts "Didn't make the online Highscore list."
+      #puts "Didn't make the online Highscore list."
     ensure
       create_text
       @disable_enter_name = "true"

@@ -5,7 +5,7 @@ require 'bundler/setup' # Releasy doesn't require that your application uses bun
 #<<<
 Releasy::Project.new do
   name "Galaxoid"
-  version "0.1"
+  version "Alpha-v0.2"
 
   executable "lib/main.rb"
   verbose

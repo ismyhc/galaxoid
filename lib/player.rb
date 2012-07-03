@@ -128,11 +128,12 @@ class Player < Chingu::GameObject
   def die!
     @life_points = @life_points - 20
     if @life_points == 0
-      @color = Color::RED
+      # Need to fix this... Would like a better effect for player death!
+      between(10,300) { self.angle += 30; @y += 800}.then { self.angle = 0}
+    else
+      between(10,300) { self.angle += 30}.then { self.angle = 0}
     end
-     # @color = Color::RED
-    #  after(300) { @color = nil }
-    #@image = Image["hit.png"]
+    
     @hit_sound.play(0.6, 1.0, false)
   end
   

@@ -13,7 +13,7 @@ class WeaponBonus < Chingu::GameObject
     
     self.factor = 6
     
-    @color = Color::BLUE
+    @color = Color::CYAN
 
     @speed = rand(10) + 3
   end

@@ -1,7 +1,8 @@
 class Enemy < Chingu::GameObject
   trait :bounding_box, :debug => false, :scale => 0.5
-  traits :collision_detection, :timer
+  traits :collision_detection, :timer, :asynchronous
   attr_accessor :color
+  attr_accessor :enemy_active
   
   def initialize(options ={})
     super
@@ -27,6 +28,8 @@ class Enemy < Chingu::GameObject
     update
 
     cache_bounding_box # This does a lot for performance
+    
+    @enemy_active = true
 
   end
   
@@ -44,7 +47,7 @@ class Enemy < Chingu::GameObject
   end
   
   def die!
-    self.reset!
+    self.destroy!
   end
   
   def reset!

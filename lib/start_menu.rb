@@ -6,21 +6,21 @@ class StartMenu < Chingu::GameState
     @center_x = $window.width / 2
     @center_y = $window.height / 2
 
-    $window.caption = "GALAXOID"
+    $window.caption = "GALAXOID alpha-0.2"
     self.input = { :f1 => :debug, [:q, :escape] => :exit, :return => :load }
     @song = Song["start.ogg"]
     @background = Image["outerspace_pattern.jpg"]
     @select_sound = Sound["select.ogg"]
-    after(1000) { @song.play(false) }
+    after(500) { @song.play(true) }
 
     begin
-      @high_score_list = OnlineHighScoreList.load(:game_id => "31", :login => "galaxiod", :password => "misterbug", :limit => 6)
-   rescue
+      @high_score_list = OnlineHighScoreList.load(:game_id => "32", :login => "ga02",
+                                                  :password => "misterbug", :limit => 6)
+      $hs = @high_score_list[0][:score]
+    rescue
       @high_score_list = HighScoreList.load(:size => 6)
-   end
+    end
    
-    $hs = @high_score_list[0][:score]
-
     start_menu
     high_score_menu
 
@@ -74,8 +74,6 @@ class StartMenu < Chingu::GameState
   end
 
   def draw
-    #$window.caption = "GALAXOID"
-    
     # Start menu boxes
     @start_green_rect = Rect.new(@center_x,@center_y,600,400)
     @start_green_rect.center=([@center_x,@center_y])
@@ -101,7 +99,6 @@ class StartMenu < Chingu::GameState
     @background
 
     #$window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
-    #$window.caption = "GALAXOID"
     
     super
   end
