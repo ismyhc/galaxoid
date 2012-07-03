@@ -17,6 +17,7 @@ class StartMenu < Chingu::GameState
       @high_score_list = OnlineHighScoreList.load(:game_id => "32", :login => "ga02",
                                                   :password => "misterbug", :limit => 6)
       $hs = @high_score_list[0][:score]
+      $hs_name = @high_score_list[0][:name]
     rescue
       @high_score_list = HighScoreList.load(:size => 6)
     end

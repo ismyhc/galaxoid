@@ -10,7 +10,7 @@ class Play < Chingu::GameState
   def setup 
     super
     @mode = :additive
-    #$window.caption = "GALAXOID alpha-0.2"
+    $window.caption = "GALAXOID alpha-0.2"
     @message
     @center_x = $window.width / 2
     @center_y = $window.height / 2   
@@ -64,7 +64,7 @@ class Play < Chingu::GameState
     @hs_text.draw_rel("High Score", $window.width - 10, -3, 24, 1, 0)
     Chingu::Text.create("High Score", :font => $default_font, :size => 20, :x => $window.width - 10,
                         :y => -3, :zorder => 24, :rotation_center => :top_right).draw
-    Chingu::Text.create("<c=fff000>#{new_hs}</c>", :font => $default_font, :size => 20, :x => $window.width - 10,
+    Chingu::Text.create("#{$hs_name} : <c=fff000>#{new_hs} </c>", :font => $default_font, :size => 20, :x => $window.width - 6,
                         :y => 16, :zorder => 24, :rotation_center => :top_right).draw
     @message = []
   end
@@ -247,7 +247,7 @@ class Play < Chingu::GameState
   def draw
     life_bar(@player.life)
     @score_font = Chingu::Text.new("Score: <c=fff000>#{@score}</c>", :font => $default_font, :size => 20, :x => 10, :y => -3, :zorder => 24).draw
-    $window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
+    #$window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
     super
   end
 end

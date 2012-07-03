@@ -3,7 +3,7 @@ class EnterName < Chingu::GameState
   def initialize(options = {})
     super
     
-    @title = options[:title] || "<u>Please enter your name</u>"
+    @title = options[:title] || " Please enter your Initials "
     Text.create(@title, :rotation_center => :top_center, :font => $default_font,
                 :x => $window.width/2, :y => 30, :size => 30)
 
@@ -74,6 +74,9 @@ class EnterName < Chingu::GameState
   end
 
   def action
+    if @string.length > 2
+      @string.pop
+    end
     case @letters[@index]
       when "DEL"      then  @string.pop
       when "SPACE"    then  @string << " "

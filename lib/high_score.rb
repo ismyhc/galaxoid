@@ -104,7 +104,7 @@ class HighScore < Chingu::GameState
 
     # Display directions to enter name
     if !defined? @disable_enter_name
-      enter_name_text1 = " - A - Enter your name - "
+      enter_name_text1 = " - A - Enter your Initials - "
       enter_name_text2 = " - ESC - Try again! - "
     elsif @disable_enter_name == "true"
       enter_name_text1 = " - ESC - Try again! - "
