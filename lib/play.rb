@@ -10,7 +10,7 @@ class Play < Chingu::GameState
   def setup 
     super
     @mode = :additive
-    $window.caption = "GALAXOID alpha-0.2"
+#    $window.caption = "GALAXOID alpha-0.2"
     @message
     @center_x = $window.width / 2
     @center_y = $window.height / 2   
@@ -61,7 +61,7 @@ class Play < Chingu::GameState
     
     @hs_text = Gosu::Font.new($window, $default_font, 20)
     new_hs = $hs.to_s.reverse.gsub(/...(?=.)/,'\&,').reverse
-    @hs_text.draw_rel("High Score", $window.width - 10, -3, 24, 1, 0)
+    #@hs_text.draw_rel("High Score", $window.width - 10, -3, 24, 1, 0)
     Chingu::Text.create("High Score", :font => $default_font, :size => 20, :x => $window.width - 10,
                         :y => -3, :zorder => 24, :rotation_center => :top_right).draw
     Chingu::Text.create("#{$hs_name} : <c=fff000>#{new_hs} </c>", :font => $default_font, :size => 20, :x => $window.width - 6,
@@ -116,11 +116,11 @@ class Play < Chingu::GameState
     text = Text.create("#{action} #{text_color}#{text}</c>", :font => $default_font,
                         :x => 10, :y => y, :size => 20)
     text.async do |q|
-      q.tween(175, :alpha => 20, :scale => 2)
+      q.tween(1500, :alpha => 20, :scale => 5)
       q.call :destroy
     end
 
-    during(200) { text.y=(y -= 5) }
+    during(1000) { text.y=(y -= 3) }
   end
   
   def update
@@ -141,13 +141,16 @@ class Play < Chingu::GameState
     
       # Player collision with Enemies
       @player.each_bounding_box_collision(@enemy) do |player, enemy|
-        enemy.reset!
-        player.die!
+        if enemy.enemy_active == true
+          enemy.enemy_active=(false)
+          enemy.reset!
+          player.die!
         
-        action_message("HP", "-20", "<c=ff0000>",  100)
+          action_message("HP", "-20", "<c=ff0000>",  200)
         
-        if @player.life_points <= 0
-          after(200) { stop_game! }
+          if @player.life_points <= 0
+            after(200) { stop_game! }
+          end
         end
         
       end
@@ -158,10 +161,10 @@ class Play < Chingu::GameState
 
         if @player.life_points >= 100
           @score = @score + 5000
-          action_message("Score", "+5000", "<c=fff000>",  100)
+          action_message("Score", "+5000", "<c=fff000>",  200)
         else
           player.life_bonus!
-          action_message("HP", "+20", "<c=00ff00>",  100)
+          action_message("HP", "+20", "<c=00ff00>",  200)
         end
         
       end
@@ -173,7 +176,7 @@ class Play < Chingu::GameState
         after(10000) { set_bullet_pattern(2) }
         after(20000) { set_bullet_pattern(1) }
 
-        action_message("Weapon", "Upgrade!", "<c=00ff00>",  100)
+        action_message("Weapon", "Upgrade!", "<c=00ff00>",  200)
         
       end
 
@@ -184,7 +187,7 @@ class Play < Chingu::GameState
         bonus = rand(1500) + 5000
         @score = @score + bonus
         
-        action_message("Score", "+#{bonus}", "<c=fff000>",  100)
+        action_message("Score", "+#{bonus}", "<c=fff000>",  200)
       end
       
       Bullet.each_bounding_box_collision(@enemy) do |bullet, enemy|
@@ -199,15 +202,15 @@ class Play < Chingu::GameState
           bullet.die!
         
           @score = @score + bonus
-          action_message("Score", "+#{bonus}", "<c=fff000>",  100)        
+          #action_message("Score", "+#{bonus}", "<c=fff000>",  100)        
        
           enemy.async do |q|
-            q.tween(250, :alpha => 0, :x => enemy.x, :y => enemy.y, :angle => 270)
+            q.tween(350, :alpha => 0, :x => enemy.x, :y => enemy.y, :angle => 270)
             q.call :die!
           end
 
-          @enemy.delete_at(@enemy.index(enemy))
-          @enemy << new_enemy
+          #@enemy.delete_at(@enemy.index(enemy))
+          #@enemy << new_enemy
         end
         
       end
@@ -240,14 +243,10 @@ class Play < Chingu::GameState
     fill_rect([10,25,size,8], Color::RED, 25)
   end
 
-  def weapon_indicator
-    
-  end
-  
   def draw
     life_bar(@player.life)
-    @score_font = Chingu::Text.new("Score: <c=fff000>#{@score}</c>", :font => $default_font, :size => 20, :x => 10, :y => -3, :zorder => 24).draw
-    #$window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
+    @hs_text.draw_rel("Score: <c=fff000>#{@score}</c>", 10, -3, 24, 0, 0)
+    $window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
     super
   end
 end

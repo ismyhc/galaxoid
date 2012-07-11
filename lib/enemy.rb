@@ -19,7 +19,7 @@ class Enemy < Chingu::GameObject
     # Load the full animation from vertical sprite strip
     @animation_delay = rand(400) + 100
     @animation = Chingu::Animation.new(:file => "enemy_10x10.png", :delay => @animation_delay)
-    @animation.frame_names = { :main => 0...3 }
+    @animation.frame_names = { :main => 0..3 }
     
     # Start out by animation frames 0-3
     @frame_name = :main
@@ -47,12 +47,16 @@ class Enemy < Chingu::GameObject
   end
   
   def die!
-    self.destroy!
+    #self.destroy!
+    self.reset!
   end
   
   def reset!
     @y = (@enemy_image_height / 2)
     @x = rand($window.width - @enemy_image_width)
+    self.alpha=(255)
+    self.angle=(0)
+    self.enemy_active=(true)
   end
   
 end
