@@ -1,5 +1,6 @@
 require 'rubygems' rescue nil
 require 'chingu'
+require 'launchy'
 
 require_relative "play"
 require_relative "player"
@@ -24,6 +25,7 @@ class Main < Chingu::Window
     Gosu::Song.autoload_dirs << File.expand_path("../songs", __FILE__)
     Gosu::Font.autoload_dirs << File.expand_path("../fonts", __FILE__)
     $default_font = File.expand_path("../lib/fonts/phaserbank.ttf", File.dirname(__FILE__))
+    $menu_font = File.expand_path("../lib/fonts/PetMe128.ttf", File.dirname(__FILE__))
     retrofy
     push_game_state(StartMenu)
   end

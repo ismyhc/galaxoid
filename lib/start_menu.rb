@@ -37,11 +37,11 @@ class StartMenu < Chingu::GameState
         @gmessage = data["gmessage"]
         Help.gmessage(@gmessage)
         puts "made request"
-        Text.create("#{@gmessage} ", :x => @center_x + 6, :y => 525, :size => 16,
+        Text.create("#{@gmessage} ", :font => $menu_font, :x => @center_x + 15, :y => 525, :size => 12,
                     :rotation_center => :center)
       end
     rescue
-      Text.create("System Message - No connection ", :x => @center_x, :y => 525, :size => 16,
+      Text.create("System Message - No connection ", :font => $menu_font, :x => @center_x, :y => 525, :size => 12,
                   :rotation_center => :center)
     end
     
