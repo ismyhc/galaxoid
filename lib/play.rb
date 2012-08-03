@@ -32,8 +32,6 @@ class Play < Chingu::GameState
     # Setup and create player
     @player = Player.create(:x => @x, :y => @y)
   
-    set_bullet_pattern(1)
-  
     @player.input = { [:holding_a, :holding_left, :holding_pad_left] => :move_left, 
                       [:holding_d, :holding_right, :holding_pad_right] => :move_right, 
                       [:holding_w, :holding_up, :holding_pad_up] => :move_up, 
@@ -47,10 +45,6 @@ class Play < Chingu::GameState
     6.times { @enemy << new_enemy }
     every(30000) { 2.times { @enemy << new_enemy } }
     
-    # Score multipliers
-#    @score_multi = 0
-#    @score_multi_timer = every(5000) { @score_multi = 0 }
-
     # Setup bonus objects
     life_bonus_time = rand(15000) + 5000
     score_bonus_time = rand(13000) + 3000
@@ -60,6 +54,7 @@ class Play < Chingu::GameState
     every(weapon_bonus_time) { @weapon_bonus = new_weapon_bonus }
     
     @hs_text = Gosu::Font.new($window, $default_font, 20)
+    @hs_text.text_width("0123456789")
     new_hs = $hs.to_s.reverse.gsub(/...(?=.)/,'\&,').reverse
     #@hs_text.draw_rel("High Score", $window.width - 10, -3, 24, 1, 0)
     Chingu::Text.create("High Score", :font => $default_font, :size => 20, :x => $window.width - 10,
@@ -83,10 +78,6 @@ class Play < Chingu::GameState
 
   def camera_down
     @parallax.camera_y += 0.3
-  end
-  
-  def set_bullet_pattern(pattern)
-    @player.bullet_pattern(pattern)
   end
   
   def new_enemy
@@ -126,16 +117,7 @@ class Play < Chingu::GameState
   def update
     if @running
       super
-
       
-     # if @score_multi == 10
-      #  @score_multi = 0
-      #  stop_timer(@score_multi_timer)
-       # @score = @score * 2
-      #  @score_multi_timer = every(5000) { @score_multi = 0 }
-      #  action_message("MULTIPLIER!", "Score.times 2!", "<c=00ff00>",  200)
-      #end
-
       @parallax.camera_y -= 0.5
       @score = @score + 1
     
@@ -151,6 +133,10 @@ class Play < Chingu::GameState
           if @player.life_points <= 0
             after(200) { stop_game! }
           end
+        end
+        
+        if player.bullet_pattern > 1
+          player.bullet_pattern=(player.bullet_pattern - 1)
         end
         
       end
@@ -171,11 +157,12 @@ class Play < Chingu::GameState
       
       # Player collisions with Weapons Bonuses
       @player.each_bounding_box_collision(@weapon_bonus) do |player, weapon_bonus|
-        weapon_bonus.die!
-        set_bullet_pattern(3)
-        after(10000) { set_bullet_pattern(2) }
-        after(20000) { set_bullet_pattern(1) }
 
+        weapon_bonus.die!
+        if player.bullet_pattern < 4
+          player.bullet_pattern=(player.bullet_pattern + 1)
+        end
+        
         action_message("Weapon", "Upgrade!", "<c=00ff00>",  200)
         
       end
@@ -190,11 +177,10 @@ class Play < Chingu::GameState
         action_message("Score", "+#{bonus}", "<c=fff000>",  200)
       end
       
+      # Bullet collisions with enemies
       Bullet.each_bounding_box_collision(@enemy) do |bullet, enemy|
 
         if enemy.enemy_active == true
-          # Score multiplier
-          #@score_multi += 1
           enemy.enemy_active=(false)
           bonus = (rand(1900) + 100) + (bullet.y)
 
@@ -205,16 +191,15 @@ class Play < Chingu::GameState
           #action_message("Score", "+#{bonus}", "<c=fff000>",  100)        
        
           enemy.async do |q|
-            q.tween(350, :alpha => 0, :x => enemy.x, :y => enemy.y, :angle => 270)
+            q.tween(500, :alpha => 0, :x => enemy.x, :y => enemy.y, :angle => 270)
             q.call :die!
           end
 
-          #@enemy.delete_at(@enemy.index(enemy))
-          #@enemy << new_enemy
         end
         
       end
       
+      # Destroy bullet object if outside of window
       Bullet.destroy_if { |bullet| bullet.outside_window? }
       
     end

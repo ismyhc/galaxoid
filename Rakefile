@@ -1,6 +1,7 @@
 require 'releasy'
 require 'rubygems' rescue nil
-require 'bundler/setup' # Releasy doesn't require that your application uses bundler, but it does make things easier.
+#require 'bundler/setup' # Releasy doesn't require that your application uses bundler, but it does make things easier.
+require 'rake/testtask'
 
 #<<<
 Releasy::Project.new do

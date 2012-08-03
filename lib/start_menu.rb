@@ -1,17 +1,23 @@
 class StartMenu < Chingu::GameState
   traits :timer
   
+  class << self
+    attr_accessor :gmessage
+  end
+  
   def initialize(options ={})
     super
+    @galaxoid_version = "0.1"
     @center_x = $window.width / 2
     @center_y = $window.height / 2
 
     $window.caption = "GALAXOID alpha-0.2"
-    self.input = { :f1 => :debug, [:q, :escape] => :exit, :return => :load }
+    self.input = { :f1 => :debug, [:q, :escape] => :exit, :return => :load, :h => :help }
     @song = Song["start.ogg"]
     @background = Image["outerspace_pattern.jpg"]
     @select_sound = Sound["select.ogg"]
     after(500) { @song.play(true) }
+    @gmessage = ""
 
     begin
       @high_score_list = OnlineHighScoreList.load(:game_id => "32", :login => "ga02",
@@ -21,10 +27,31 @@ class StartMenu < Chingu::GameState
     rescue
       @high_score_list = HighScoreList.load(:size => 6)
     end
-   
+    
+    begin
+      @gmessage_resource = RestClient::Resource.new("http://gmessage.herokuapp.com/version/#{@galaxoid_version}",
+                                                    :headers => {:user_agent => "Galaxoid - #{@galaxoid_version}"})
+      res = @gmessage_resource.get
+      data = Crack::XML.parse(res)
+      if data["gmessage"]
+        @gmessage = data["gmessage"]
+        Help.gmessage(@gmessage)
+        puts "made request"
+        Text.create("#{@gmessage} ", :x => @center_x + 6, :y => 525, :size => 16,
+                    :rotation_center => :center)
+      end
+    rescue
+      Text.create("System Message - No connection ", :x => @center_x, :y => 525, :size => 16,
+                  :rotation_center => :center)
+    end
+    
     start_menu
     high_score_menu
 
+  end
+  
+  def help
+    push_game_state(Help, :finalize => false)
   end
   
   def start_menu
@@ -97,8 +124,6 @@ class StartMenu < Chingu::GameState
     @score_black_rect.centerx=(@center_x)
     fill_rect(@score_black_rect, Color::BLACK, 6)
     
-    @background
-
     #$window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
     
     super

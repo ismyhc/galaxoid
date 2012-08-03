@@ -1,5 +1,5 @@
 class Enemy < Chingu::GameObject
-  trait :bounding_box, :debug => false, :scale => 0.5
+  trait :bounding_box, :debug => false, :scale => 1.2
   traits :collision_detection, :timer, :asynchronous
   attr_accessor :color
   attr_accessor :enemy_active
@@ -13,7 +13,8 @@ class Enemy < Chingu::GameObject
     @enemy_image_height = 10 * 3
     @x = rand($window.width - @enemy_image_width)
     @y = (@enemy_image_height / 2)
-    @color_array = [Gosu::Color.argb(0xff2CFF00), Gosu::Color.argb(0xff70ed3b), Gosu::Color.argb(0xff34D2AF)]
+    @color_array = [Gosu::Color.argb(0xff2CFF00), Gosu::Color.argb(0xff70ed3b),
+                    Gosu::Color.argb(0xff34D2AF), Gosu::Color.argb(0xff37D3AF)]
     @color = @color_array.sample
 
     # Load the full animation from vertical sprite strip
@@ -30,24 +31,20 @@ class Enemy < Chingu::GameObject
     cache_bounding_box # This does a lot for performance
     
     @enemy_active = true
+    self.factor = 3
 
   end
   
   def update
-           
-    self.factor = 3
     if self.outside_window?
       self.reset!
     else
       @y = @y + @enemy_speed
     end
-    
     @image = @animation[@frame_name].next
-
   end
   
   def die!
-    #self.destroy!
     self.reset!
   end
   

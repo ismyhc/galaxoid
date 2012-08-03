@@ -19,7 +19,7 @@ class HighScore < Chingu::GameState
     ensure
       #not sure why, but @the_score not set unless i wait?
       after(100) { create_text }
-  end
+    end
 
   end
   

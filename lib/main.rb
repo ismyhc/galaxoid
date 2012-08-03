@@ -11,6 +11,7 @@ require_relative "score_bonus"
 require_relative "start_menu"
 require_relative "high_score"
 require_relative "enter_name"
+require_relative "help"
 
 include Gosu
 include Chingu

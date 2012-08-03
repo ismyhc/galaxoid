@@ -2,6 +2,7 @@ class Bullet < Chingu::GameObject
   
   trait :bounding_box, :debug => false, :scale => 3.0
   traits :collision_detection, :timer
+  attr_accessor :bullet_angle
 
   def initialize(options)
     super(options.merge(:image => Image["bullet_3x3.png"]))
@@ -18,7 +19,15 @@ class Bullet < Chingu::GameObject
 
   # Move the bullet forward
   def update
-    @y -= @bullet_speed
+    if bullet_angle == "left"
+      @y -= @bullet_speed
+      @x -= @bullet_speed - 10
+    elsif bullet_angle == "right"
+      @y -= @bullet_speed
+      @x += @bullet_speed - 10
+    else
+      @y -= @bullet_speed
+    end
   end
   
   def die!
