@@ -94,7 +94,7 @@ class StartMenu < Chingu::GameState
     
   def load
     @select_sound.play(0.4, 3.0, false)
-    after(100) { push_game_state(Play) }
+    after(200) { push_game_state(Play) }
   end
 
   def finalize

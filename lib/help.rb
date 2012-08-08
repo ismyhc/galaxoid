@@ -1,9 +1,7 @@
 class Help < Chingu::GameState
   traits :timer
-  Chingu::Text.trait :asynchronous
   
-  
-  def initialize(options = {})
+  def initialize(options ={})
     super
     @white = Gosu::Color.new(255,255,255,255)
     @color = Gosu::Color.new(225,0,0,0)
@@ -11,13 +9,17 @@ class Help < Chingu::GameState
     @label = Gosu::Font.new($window, $default_font, 30)
     @text = Gosu::Font.new($window, $menu_font, 12)
     @label_1 = "Controls"
-    @text_1 = "- Move player with a,s,d,f or arrow keys"
+    @text_1 = "- Move player with a,w,s,d or arrow keys"
     @text_2 = "- Fire with enter or space"
     @label_2 = "System Messages"
     @text_3 = "- #{Help.the_gmessage}"
     @testy = ""
     @testt = "You are going to be cool".scan(/./)
     self.input = { :d => :download_page }
+    
+    @update = Sound["update.ogg"]
+    
+    play_update
 
   #  @testt.each do |i|
    #   @testy += i
@@ -32,13 +34,18 @@ class Help < Chingu::GameState
     end
   end
   
+  def play_update
+    @update.play(1.0, 1.0, false)
+  end
+  
+  
   def download_page
     Launchy.open("http://ismyhc.github.com/galaxoid/")
   end
 
   def button_up(id)
     pop_game_state(:setup => false) if id == Gosu::KbEscape   # Return the previous game state, dont call setup()
-  end
+  end  
   
   def draw
     previous_game_state.draw    # Draw prev game state onto screen (in this case our level)
