@@ -19,7 +19,9 @@ class Help < Chingu::GameState
     
     @update = Sound["update.ogg"]
     
-    play_update
+    if Help.the_gupdate
+      play_update
+    end
 
   #  @testt.each do |i|
    #   @testy += i
@@ -29,8 +31,13 @@ class Help < Chingu::GameState
   #Score keeper class
   class << self
     attr_accessor :gmessage, :the_gmessage
+    attr_accessor :gupdate, :the_gupdate
     def gmessage(gmessage)
       @the_gmessage = gmessage
+    end
+    
+    def gupdate(gupdate)
+      @the_gupdate = gupdate
     end
   end
   

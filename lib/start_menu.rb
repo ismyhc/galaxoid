@@ -3,11 +3,12 @@ class StartMenu < Chingu::GameState
   
   class << self
     attr_accessor :gmessage
+    attr_accessor :gupdate
   end
   
   def initialize(options ={})
     super
-    @galaxoid_version = "0.1"
+    @galaxoid_version = "0.2"
     @center_x = $window.width / 2
     @center_y = $window.height / 2
 
@@ -18,6 +19,7 @@ class StartMenu < Chingu::GameState
     @select_sound = Sound["select.ogg"]
     after(500) { @song.play(true) }
     @gmessage = ""
+    @gupdate = false
 
     begin
       @high_score_list = OnlineHighScoreList.load(:game_id => "32", :login => "ga02",
@@ -33,12 +35,19 @@ class StartMenu < Chingu::GameState
                                                     :headers => {:user_agent => "Galaxoid - #{@galaxoid_version}"})
       res = @gmessage_resource.get
       data = Crack::XML.parse(res)
-      if data["gmessage"]
-        @gmessage = data["gmessage"]
+      if data["galaxoid"]
+        @gmessage = data["galaxoid"]["gmessage"]
         Help.gmessage(@gmessage)
-        puts "made request"
         Text.create("#{@gmessage} ", :font => $menu_font, :x => @center_x + 15, :y => 525, :size => 12,
                     :rotation_center => :center)
+      end
+      if data["galaxoid"]
+        if data["galaxoid"]["gupdate"] === "true"
+          @gupdate = true
+        elsif data["galaxoid"]["gupdate"] === "false"
+          @gupdate = false
+        end
+        Help.gupdate(@gupdate)
       end
     rescue
       Text.create("System Message - No connection ", :font => $menu_font, :x => @center_x, :y => 525, :size => 12,
