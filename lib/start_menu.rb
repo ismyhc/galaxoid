@@ -2,8 +2,9 @@ class StartMenu < Chingu::GameState
   traits :timer
   
   class << self
-    attr_accessor :gmessage
-    attr_accessor :gupdate
+    attr_accessor :g_message
+    attr_accessor :g_version_message
+    attr_accessor :g_update
   end
   
   def initialize(options ={})
@@ -18,8 +19,13 @@ class StartMenu < Chingu::GameState
     @background = Image["outerspace_pattern.jpg"]
     @select_sound = Sound["select.ogg"]
     after(500) { @song.play(true) }
-    @gmessage = ""
-    @gupdate = false
+    @g_message = "Apparently there is no connection to the Galaxoid systems"
+    @g_version_message = ""
+    @g_update = false
+    @help_info = "Press [h] for controls and other info"
+    
+    Text.create(@help_info, :font => $menu_font, :x => @center_x + 15, :y => 545, :size => 12,
+                :rotation_center => :center, :color => Color::CYAN)
 
     begin
       @high_score_list = OnlineHighScoreList.load(:game_id => "32", :login => "ga02",
@@ -35,23 +41,31 @@ class StartMenu < Chingu::GameState
                                                     :headers => {:user_agent => "Galaxoid - #{@galaxoid_version}"})
       res = @gmessage_resource.get
       data = Crack::XML.parse(res)
+
       if data["galaxoid"]
-        @gmessage = data["galaxoid"]["gmessage"]
-        Help.gmessage(@gmessage)
-        Text.create("#{@gmessage} ", :font => $menu_font, :x => @center_x + 15, :y => 525, :size => 12,
-                    :rotation_center => :center)
-      end
-      if data["galaxoid"]
-        if data["galaxoid"]["gupdate"] === "true"
-          @gupdate = true
-        elsif data["galaxoid"]["gupdate"] === "false"
-          @gupdate = false
+        if data["galaxoid"]["g_update"] === "true"
+          @g_update = true
+          @g_update_color = Color::RED
+        elsif data["galaxoid"]["g_update"] === "false"
+          @g_update = false
+          @g_update_color = Color::GREEN
         end
-        Help.gupdate(@gupdate)
+        @g_version_message = data["galaxoid"]["g_version_message"]
+        @g_message = data["galaxoid"]["g_message"]
+        Help.g_update(@g_update)
+        Help.g_version_message(@g_version_message)
+        Help.g_message(@g_message)
+        Text.create("#{@g_version_message} ", :font => $menu_font, :x => @center_x + 15, :y => 525, :size => 12,
+                    :rotation_center => :center, :color => @g_update_color)
       end
+
     rescue
-      Text.create("System Message - No connection ", :font => $menu_font, :x => @center_x, :y => 525, :size => 12,
-                  :rotation_center => :center)
+      Text.create(@g_message, :font => $menu_font, :x => @center_x + 15, :y => 525, :size => 12,
+                  :rotation_center => :center, :color => Color::RED)
+
+      Help.g_version_message("System Version: " + @galaxoid_version)
+      Help.g_message(@g_message)
+                  
     end
     
     start_menu
