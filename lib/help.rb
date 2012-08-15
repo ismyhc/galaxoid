@@ -14,7 +14,8 @@ class Help < Chingu::GameState
     @text_controls_2 = "- Fire with enter or space"
     
     @label_how_to_play = "How to play"
-    @text_how_to_play_1= "-> Dodge the enemes. Look out for life, weapon and score bonuses!"
+    @text_how_to_play_1= "-> Dodge the enemies. Look out for life, weapon and score bonuses!"
+    @text_how_to_play_2 = "-> Stacked enemies can take more life than you think!"
 
     @label_system = "System Messages"
     @text_system_1 = "-> #{Help.the_g_version_message}"
@@ -84,9 +85,10 @@ class Help < Chingu::GameState
     @text.draw(@text_controls_2, 10, 60, Chingu::DEBUG_ZORDER + 1)
     @label.draw(@label_how_to_play, 10, 100, Chingu::DEBUG_ZORDER + 1, 1, 1, Gosu::Color::YELLOW)
     @text.draw(@text_how_to_play_1, 10, 130, Chingu::DEBUG_ZORDER + 1)
-    @label.draw(@label_system, 10, 170, Chingu::DEBUG_ZORDER + 1, 1, 1, Gosu::Color::YELLOW)
-    @text.draw(@text_system_1, 10, 200, Chingu::DEBUG_ZORDER + 1, 1, 1, @update_color)
-    @text.draw(@text_system_2, 10, 220, Chingu::DEBUG_ZORDER + 1, 1, 1, Gosu::Color::GREEN)
+    @text.draw(@text_how_to_play_2, 10, 150, Chingu::DEBUG_ZORDER + 1)
+    @label.draw(@label_system, 10, 190, Chingu::DEBUG_ZORDER + 1, 1, 1, Gosu::Color::YELLOW)
+    @text.draw(@text_system_1, 10, 220, Chingu::DEBUG_ZORDER + 1, 1, 1, @update_color)
+    @text.draw(@text_system_2, 10, 240, Chingu::DEBUG_ZORDER + 1, 1, 1, Gosu::Color::GREEN)
     @text.draw(@downloads_page, ($window.width/2 - @text.text_width(@downloads_page)/2), $window.height - 40, Chingu::DEBUG_ZORDER + 1, 1, 1, Gosu::Color::CYAN)
     
   end

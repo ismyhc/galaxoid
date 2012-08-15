@@ -146,8 +146,9 @@ class Play < Chingu::GameState
         life_bonus.die!
 
         if @player.life_points >= 100
-          @score = @score + 5000
-          action_message("Score", "+5000", "<c=fff000>",  200)
+          bonus = ((life_bonus.y + life_bonus.x) + (player.x + player.y)) * (rand(4) + 1)
+          @score = @score + bonus
+          action_message("Score", "+#{bonus}", "<c=fff000>",  200)
         else
           player.life_bonus!
           action_message("HP", "+20", "<c=00ff00>",  200)
@@ -158,12 +159,19 @@ class Play < Chingu::GameState
       # Player collisions with Weapons Bonuses
       @player.each_bounding_box_collision(@weapon_bonus) do |player, weapon_bonus|
 
-        weapon_bonus.die!
+        
         if player.bullet_pattern < 4
+          weapon_bonus.die!(true)
           player.bullet_pattern=(player.bullet_pattern + 1)
+          action_message("Weapon", "Upgrade!", "<c=00ff00>",  200)
+        elsif player.bullet_pattern === 4
+          weapon_bonus.die!(false)
+          bonus = ((weapon_bonus.y + weapon_bonus.x) + (player.x + player.y)) * (rand(15) + 1)
+          @score = @score + bonus
+          action_message("Score", "+#{bonus}", "<c=fff000>",  200)
         end
         
-        action_message("Weapon", "Upgrade!", "<c=00ff00>",  200)
+
         
       end
 
@@ -171,7 +179,7 @@ class Play < Chingu::GameState
       @player.each_bounding_box_collision(@score_bonus) do |player, score_bonus|
         score_bonus.die!
         
-        bonus = rand(1500) + 5000
+        bonus = ((score_bonus.y + score_bonus.x) + (player.x + player.y)) * (rand(4) + 1)
         @score = @score + bonus
         
         action_message("Score", "+#{bonus}", "<c=fff000>",  200)

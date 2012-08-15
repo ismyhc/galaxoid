@@ -29,8 +29,10 @@ class WeaponBonus < Chingu::GameObject
 
   end
   
-  def die!
-    @sound.play(0.8)
+  def die!(sound)
+    if sound === true
+      @sound.play(0.8)
+    end
     self.reset!
   end
   
