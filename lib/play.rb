@@ -10,7 +10,7 @@ class Play < Chingu::GameState
   def setup 
     super
     @mode = :additive
-#    $window.caption = "GALAXOID alpha-0.2"
+    $window.caption = "GALAXOID alpha-#{$galaxoid_version}"
     @message
     @center_x = $window.width / 2
     @center_y = $window.height / 2   
@@ -231,7 +231,7 @@ class Play < Chingu::GameState
   def draw
     life_bar(@player.life)
     @hs_text.draw_rel("Score: <c=fff000>#{@score}</c>", 10, -3, 24, 0, 0)
-    $window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
+    #$window.caption = "FPS: #{$window.fps} - milliseconds_since_last_tick: #{$window.milliseconds_since_last_tick} - game objects# #{current_game_state.game_objects.size}"
     super
   end
 end

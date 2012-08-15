@@ -6,7 +6,7 @@ require 'rake/testtask'
 #<<<
 Releasy::Project.new do
   name "Galaxoid"
-  version "Alpha-v0.2"
+  version "Alpha-v0.3"
 
   executable "lib/main.rb"
   verbose

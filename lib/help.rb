@@ -10,7 +10,7 @@ class Help < Chingu::GameState
     @label = Gosu::Font.new($window, $default_font, 30)
     @text = Gosu::Font.new($window, $menu_font, 12)
     @label_controls = "Controls"
-    @text_controls_1= "- Move player with a,w,s,d or arrow keys"
+    @text_controls_1= "- Move ship with a,w,s,d or arrow keys"
     @text_controls_2 = "- Fire with enter or space"
     
     @label_how_to_play = "How to play"

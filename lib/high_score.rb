@@ -12,8 +12,8 @@ class HighScore < Chingu::GameState
     after(100) { @song.play(true) }
     
     begin
-      @high_score_list = OnlineHighScoreList.load(:game_id => "32", :login => "ga02",
-                                                  :password => "misterbug", :limit => 16)
+      @high_score_list = OnlineHighScoreList.load(:game_id => "35", :login => "ga03",
+                                                  :password => "misterbug3", :limit => 16)
     rescue
       @high_score_list = HighScoreList.load(:size => 6)
     ensure

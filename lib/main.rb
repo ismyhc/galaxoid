@@ -26,6 +26,7 @@ class Main < Chingu::Window
     Gosu::Font.autoload_dirs << File.expand_path("../fonts", __FILE__)
     $default_font = File.expand_path("../lib/fonts/phaserbank.ttf", File.dirname(__FILE__))
     $menu_font = File.expand_path("../lib/fonts/PetMe128.ttf", File.dirname(__FILE__))
+    $galaxoid_version = "0.3"
     retrofy
     push_game_state(StartMenu)
   end

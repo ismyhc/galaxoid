@@ -9,17 +9,16 @@ class StartMenu < Chingu::GameState
   
   def initialize(options ={})
     super
-    @galaxoid_version = "0.2"
     @center_x = $window.width / 2
     @center_y = $window.height / 2
 
-    $window.caption = "GALAXOID alpha-0.2"
+    $window.caption = "GALAXOID alpha-#{$galaxoid_version}"
     self.input = { :f1 => :debug, [:q, :escape] => :exit, :return => :load, :h => :help }
     @song = Song["start.ogg"]
     @background = Image["outerspace_pattern.jpg"]
     @select_sound = Sound["select.ogg"]
     after(500) { @song.play(true) }
-    @g_message = "Apparently there is no connection to the Galaxoid systems"
+    @g_message = "Apparently there is no connection to the Galaxoid System"
     @g_version_message = ""
     @g_update = false
     @help_info = "Press [h] for controls and other info"
@@ -28,8 +27,8 @@ class StartMenu < Chingu::GameState
                 :rotation_center => :center, :color => Color::CYAN)
 
     begin
-      @high_score_list = OnlineHighScoreList.load(:game_id => "32", :login => "ga02",
-                                                  :password => "misterbug", :limit => 6)
+      @high_score_list = OnlineHighScoreList.load(:game_id => "35", :login => "ga03",
+                                                  :password => "misterbug3", :limit => 6)
       $hs = @high_score_list[0][:score]
       $hs_name = @high_score_list[0][:name]
     rescue
@@ -37,8 +36,8 @@ class StartMenu < Chingu::GameState
     end
     
     begin
-      @gmessage_resource = RestClient::Resource.new("http://gmessage.herokuapp.com/version/#{@galaxoid_version}",
-                                                    :headers => {:user_agent => "Galaxoid - #{@galaxoid_version}"})
+      @gmessage_resource = RestClient::Resource.new("http://gmessage.herokuapp.com/version/#{$galaxoid_version}",
+                                                    :headers => {:user_agent => "Galaxoid - #{$galaxoid_version}"})
       res = @gmessage_resource.get
       data = Crack::XML.parse(res)
 
@@ -63,7 +62,7 @@ class StartMenu < Chingu::GameState
       Text.create(@g_message, :font => $menu_font, :x => @center_x + 15, :y => 525, :size => 12,
                   :rotation_center => :center, :color => Color::RED)
 
-      Help.g_version_message("System Version: " + @galaxoid_version)
+      Help.g_version_message("System Version: " + $galaxoid_version)
       Help.g_message(@g_message)
                   
     end
