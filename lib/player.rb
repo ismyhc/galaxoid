@@ -108,7 +108,7 @@ class Player < Chingu::GameObject
   
   def die!
     @life_points = @life_points - 20
-    if @life_points == 0
+    if @life_points === 0
       # Need to fix this... Would like a better effect for player death!
       between(10,300) { self.angle += 30; @y += 800}.then { self.angle = 0}
     else
@@ -122,7 +122,10 @@ class Player < Chingu::GameObject
   end
   
   def life_bonus!
-    @life_points = @life_points + 20
+    if @life_points >= 100
+    else
+      @life_points = @life_points + 20
+    end
   end
 
   def reset!

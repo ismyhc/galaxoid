@@ -123,8 +123,13 @@ class Play < Chingu::GameState
     
       # Player collision with Enemies
       @player.each_bounding_box_collision(@enemy) do |player, enemy|
-        if enemy.enemy_active == true
+        if enemy.enemy_active === true
           enemy.enemy_active=(false)
+          
+          if player.bullet_pattern > 1
+            player.bullet_pattern=(player.bullet_pattern - 1)
+          end
+          
           enemy.reset!
           player.die!
         
@@ -135,21 +140,17 @@ class Play < Chingu::GameState
           end
         end
         
-        if player.bullet_pattern > 1
-          player.bullet_pattern=(player.bullet_pattern - 1)
-        end
-        
       end
 
       # Player collisions with Life Bonuses
       @player.each_bounding_box_collision(@life_bonus) do |player, life_bonus|
         life_bonus.die!
 
-        if @player.life_points >= 100
+        if player.life_points >= 100
           bonus = ((life_bonus.y + life_bonus.x) + (player.x + player.y)) * (rand(4) + 1)
           @score = @score + bonus
           action_message("Score", "+#{bonus}", "<c=fff000>",  200)
-        else
+        elsif player.life_points < 100
           player.life_bonus!
           action_message("HP", "+20", "<c=00ff00>",  200)
         end
@@ -159,7 +160,6 @@ class Play < Chingu::GameState
       # Player collisions with Weapons Bonuses
       @player.each_bounding_box_collision(@weapon_bonus) do |player, weapon_bonus|
 
-        
         if player.bullet_pattern < 4
           weapon_bonus.die!(true)
           player.bullet_pattern=(player.bullet_pattern + 1)
@@ -171,38 +171,31 @@ class Play < Chingu::GameState
           action_message("Score", "+#{bonus}", "<c=fff000>",  200)
         end
         
-
-        
       end
 
       # Player collisions with Score Bonuses
       @player.each_bounding_box_collision(@score_bonus) do |player, score_bonus|
         score_bonus.die!
-        
         bonus = ((score_bonus.y + score_bonus.x) + (player.x + player.y)) * (rand(4) + 1)
         @score = @score + bonus
-        
         action_message("Score", "+#{bonus}", "<c=fff000>",  200)
       end
       
       # Bullet collisions with enemies
       Bullet.each_bounding_box_collision(@enemy) do |bullet, enemy|
 
-        if enemy.enemy_active == true
+        if enemy.enemy_active === true
           enemy.enemy_active=(false)
-          bonus = (rand(1900) + 100) + (bullet.y)
-
-          @bullet_death.play(0.2)
-          bullet.die!
-        
-          @score = @score + bonus
-          #action_message("Score", "+#{bonus}", "<c=fff000>",  100)        
-       
           enemy.async do |q|
             q.tween(500, :alpha => 0, :x => enemy.x, :y => enemy.y, :angle => 270)
             q.call :die!
           end
-
+          @bullet_death.play(0.2)
+          bullet.die!
+        
+          bonus = (rand(1900) + 100) + (bullet.y)
+          @score = @score + bonus
+       
         end
         
       end
