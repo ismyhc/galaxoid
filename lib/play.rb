@@ -195,6 +195,8 @@ class Play < Chingu::GameState
         
           bonus = (rand(1900) + 100) + (bullet.y)
           @score = @score + bonus
+          puts bonus
+          
        
         end
         
