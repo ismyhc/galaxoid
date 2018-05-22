@@ -1,7 +1,7 @@
 GALAXOID
 ========
 
-**(Old early prototype, not unity ios version)
+**(Old early prototype, not unity ios version)**
 
 This is a game built using Chingu/Gosu ruby game library. It is mainly a learning experience for myself, but ultimate goal would be to build the game to be a fully functional and fun retro style game!
 
